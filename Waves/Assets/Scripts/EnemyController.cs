@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     Rigidbody player;
-    Rigidbody rb;
+    Rigidbody enemy;
 
     Vector3 moveAmount;
     Vector3 smoothMoveSpeed;
