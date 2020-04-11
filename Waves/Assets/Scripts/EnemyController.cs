@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    public Rigidbody player;
+    Rigidbody player;
     Rigidbody rb;
 
     Vector3 moveAmount;
@@ -54,5 +54,3 @@ public class EnemyController : MonoBehaviour
         }
     }
 }
-
-//Aaaaaaaaaaaa
