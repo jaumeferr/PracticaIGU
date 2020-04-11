@@ -439,6 +439,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1058594878 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: -3768732833173921992, guid: b0ee087ab751e4e468eafc8de9d8929f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1075575986}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1075575986
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -459,7 +465,7 @@ PrefabInstance:
     - target: {fileID: 4250730666901226386, guid: b0ee087ab751e4e468eafc8de9d8929f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -58.86
+      value: -41.1
       objectReference: {fileID: 0}
     - target: {fileID: 4250730666901226386, guid: b0ee087ab751e4e468eafc8de9d8929f,
         type: 3}
@@ -525,6 +531,11 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6059060114092338868, guid: b88144c84f5fd3849a9bb72ef1be07a1,
+        type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1058594878}
     - target: {fileID: 6911674075380807529, guid: b88144c84f5fd3849a9bb72ef1be07a1,
         type: 3}
       propertyPath: m_LocalPosition.x
