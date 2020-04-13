@@ -548,6 +548,11 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6059060114092338868, guid: b88144c84f5fd3849a9bb72ef1be07a1,
+        type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1058594878}
     - target: {fileID: 6911674075380807529, guid: b88144c84f5fd3849a9bb72ef1be07a1,
         type: 3}
       propertyPath: m_LocalPosition.x
