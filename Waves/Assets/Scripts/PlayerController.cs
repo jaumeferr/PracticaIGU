@@ -5,11 +5,15 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float playerSpeed = 8f;
+    float torqueSpeed = 1000f;
     public bool paperFound = false;
     public int score = 0;
 
     Vector3 moveAmount;
+    public float turn;
     Vector3 smoothMoveSpeed;
+    
+    Rigidbody rb;
 
     enum PlayerState
     {
@@ -18,7 +22,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = this.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -35,7 +39,8 @@ public class PlayerController : MonoBehaviour
     }
 
     void FixedUpdate(){
-        this.GetComponent<Rigidbody>().MovePosition(this.GetComponent<Rigidbody>().position + this.GetComponent<Transform>().TransformDirection(moveAmount) * Time.fixedDeltaTime);
+        //Walk
+        rb.MovePosition(rb.position + this.GetComponent<Transform>().TransformDirection(moveAmount) * Time.fixedDeltaTime);
     }
 
     void Jump(){
