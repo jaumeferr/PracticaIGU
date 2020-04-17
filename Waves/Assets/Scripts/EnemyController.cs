@@ -4,53 +4,32 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    Rigidbody player;
+    public Rigidbody player;
     Rigidbody rb;
+    Transform tf;
+    float speed = 0.1f;
 
-    Vector3 moveAmount;
-    Vector3 smoothMoveSpeed;
-
-    //Movement variables
     Vector3 planetCenter = new Vector3(0.0f, 0.0f, 0.0f);
-    Vector3 directionToTarget;
-    Vector3 directionToTargetNormalized;
-    float distanceToTarget;
-    Vector3 auxPoint;
-
+    
     // Start is called before the first frame update
     void Start()
     {
        rb = this.GetComponent<Rigidbody>(); 
+       tf = this.GetComponent<Transform>();
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
-        //Direction between enemy and player
-        directionToTarget = player.position - rb.position;
-        distanceToTarget = directionToTarget.magnitude; 
-        directionToTargetNormalized = Vector3.Normalize(directionToTarget);
+        //ENEMY MOVEMENT
+            //A --> Vector de C al enemigo, B --> Vector de C al jugador
+        Vector3 v = Vector3.Cross(rb.position - planetCenter, player.position - planetCenter).normalized;
+        Vector3 dir = Vector3.Cross(v, rb.position - planetCenter).normalized;
 
-        Ray rayToTarget = new Ray(rb.position, player.position);
-        RaycastHit rayHitToTarget;
-        if(Physics.Raycast (rayToTarget, out rayHitToTarget)){
-            Debug.DrawLine (rayToTarget.origin, rayHitToTarget.point, Color.green);
-        }
+        //Mirar hacia el objetivo
+        Quaternion rotation = Quaternion.LookRotation((tf.position + dir * speed) - tf.position, Vector3.up);
+        tf.rotation = rotation;
 
-        //Point some small distance along the line
-        auxPoint = rb.position + directionToTargetNormalized;
-
-        //Ray through that point to the center of the earth
-        Ray rayToGround = new Ray(planetCenter, auxPoint);
-        
-        //Intersection over the ray and the ground
-        RaycastHit hitGroundInfo;
-        if(Physics.Raycast (rayToGround, out hitGroundInfo)){
-            if(hitGroundInfo.rigidbody != null){
-                Debug.DrawLine (rayToGround.origin, hitGroundInfo.point, Color.yellow);
-                //Move to the waypoint
-                rb.position = hitGroundInfo.point;
-            }
-        }
+        //Ir hacia el objetivo
+        tf.position = tf.position + (dir * speed);
     }
 }
