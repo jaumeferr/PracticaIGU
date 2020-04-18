@@ -4,18 +4,24 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    public int vidas;
+    public UnityEngine.UI.Text texto_vidas;
+
     public Rigidbody player;
     Rigidbody rb;
     Transform tf;
     float speed = 0.1f;
-
     Vector3 planetCenter = new Vector3(0.0f, 0.0f, 0.0f);
+    public UnityEngine.UI.Text texto;
+
     
     // Start is called before the first frame update
     void Start()
     {
-       rb = this.GetComponent<Rigidbody>(); 
-       tf = this.GetComponent<Transform>();
+        this.texto.text = "";
+        rb = this.GetComponent<Rigidbody>(); 
+        tf = this.GetComponent<Transform>();
+        setVidasTexto();
     }
 
     void FixedUpdate()
@@ -31,5 +37,26 @@ public class EnemyController : MonoBehaviour
 
         //Ir hacia el objetivo
         tf.position = tf.position + (dir * speed);
+    }
+
+    // Ataque enemigo
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            this.texto_vidas.text = "HOLAAAAA";
+            vidas = vidas - 1;
+            setVidasTexto();
+            if (vidas < 1)
+            {
+                other.gameObject.SetActive(false);
+                this.texto.text = "YOU DIED";
+            }
+        }
+    }
+
+    private void setVidasTexto()
+    {
+        this.texto_vidas.text = "Vidas: " + vidas.ToString();
     }
 }
