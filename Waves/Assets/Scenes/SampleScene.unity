@@ -569,6 +569,10 @@ MonoBehaviour:
   paperFound: 0
   score: 0
   turn: 0
+  myColor: {r: 0.7882353, g: 0.16862746, b: 0.20784314, a: 0}
+  material: {fileID: 2100000, guid: 0037e1800aa2f6a4fa78aebfb9fea367, type: 2}
+  changeCol: 32
+  cooldown: 3
 --- !u!114 &931399344
 MonoBehaviour:
   m_ObjectHideFlags: 0

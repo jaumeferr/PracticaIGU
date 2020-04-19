@@ -19,10 +19,20 @@ public class PlayerController : MonoBehaviour
     {
         Walk, Attack, Jump
     }
+
+    //Color al atacar
+    public Color myColor;
+    public Material material;
+    public KeyCode changeCol;
+    private bool attacking;
+    public float cooldown;
+    private float nextFireTime;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = this.GetComponent<Rigidbody>();
+        attacking = false;
     }
 
     // Update is called once per frame
@@ -31,6 +41,16 @@ public class PlayerController : MonoBehaviour
         Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
         Vector3 targetMoveAmount = moveDir * playerSpeed;
         moveAmount = Vector3.SmoothDamp(moveAmount, targetMoveAmount, ref smoothMoveSpeed, .15f);
+        rb.MovePosition(rb.position + this.GetComponent<Transform>().TransformDirection(moveAmount) * Time.fixedDeltaTime);
+
+        if(Time.time > nextFireTime){
+            if (Input.GetKeyDown(changeCol))
+            {
+                print("GO STUPID!");
+                nextFireTime = Time.time + cooldown;
+                material.color = myColor;
+            }
+        }
     }
 
     void addPoints(int points)
@@ -38,12 +58,5 @@ public class PlayerController : MonoBehaviour
         this.score += points;
     }
 
-    void FixedUpdate(){
-        //Walk
-        rb.MovePosition(rb.position + this.GetComponent<Transform>().TransformDirection(moveAmount) * Time.fixedDeltaTime);
-    }
 
-    void Jump(){
-        
-    }
 }
