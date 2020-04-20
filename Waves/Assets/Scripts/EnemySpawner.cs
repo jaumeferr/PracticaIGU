@@ -7,8 +7,8 @@ public class EnemySpawner : MonoBehaviour
     public int count;
 
     public Transform prefabEnemy;
-    public Rigidbody planet;
-    public Rigidbody player;
+    private GameObject planet;
+    private GameObject player;
 
     private Vector3 planetCenter;
     private float radius;
@@ -16,18 +16,23 @@ public class EnemySpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        planet = GameObject.Find("Planet");
+        player = GameObject.Find("Player");
+
         radius = 40.0f;
         count = 15;
         SpawnEnemies(count);
     }
 
-    // Update is called once per frame
+    // Update is called once per frame9
     void Update()
     {
         
     }
 
     void SpawnEnemies(int count){
+        Rigidbody planetRb = planet.GetComponent<Rigidbody>();
+        Rigidbody playerRb = player.GetComponent<Rigidbody>();
         int i = count;
 
         //Spawnear enemigos
@@ -37,10 +42,10 @@ public class EnemySpawner : MonoBehaviour
             float alfa = Random.Range(0.0f, 2 * Mathf.PI);
 
             //Determinar x,y,z 
-            Vector3 newPos = new Vector3(planet.x + radius*Math.cos(beta), planet.y + radius*Math.sin(beta), planet.z + radius*Math.cos(alfa));
+            Vector3 newPos = new Vector3(planetRb.position.x + radius*Mathf.Cos(beta), planetRb.position.y + radius*Mathf.Sin(beta), planetRb.position.z + radius*Mathf.Cos(alfa));
 
             //Comprobar distancia segura respecto al jugador
-            Vector3 enemyToPlayer = newPos - player.position;
+            Vector3 enemyToPlayer = newPos - playerRb.position;
 
             Debug.Log(
                 enemyToPlayer.magnitude
