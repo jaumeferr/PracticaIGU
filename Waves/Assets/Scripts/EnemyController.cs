@@ -7,6 +7,7 @@ public class EnemyController : MonoBehaviour
     public int vidas;
     public UnityEngine.UI.Text texto_vidas;
 
+    //public GameObject player;
     public Rigidbody player;
     Rigidbody rb;
     Transform tf;
@@ -22,6 +23,7 @@ public class EnemyController : MonoBehaviour
         rb = this.GetComponent<Rigidbody>(); 
         tf = this.GetComponent<Transform>();
         setVidasTexto();
+        //player = GameObject.Find("Player");
     }
 
     void FixedUpdate()
@@ -42,9 +44,8 @@ public class EnemyController : MonoBehaviour
     // Ataque enemigo
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" && !player.GetComponent<PlayerController>().attacking)
         {
-            this.texto_vidas.text = "HOLAAAAA";
             vidas = vidas - 1;
             setVidasTexto();
             if (vidas < 1)

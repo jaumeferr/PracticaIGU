@@ -21,12 +21,14 @@ public class PlayerController : MonoBehaviour
     }
 
     //Color al atacar
-    public Color myColor;
+    public Color initialColor;
+    public Color AttackColor;
     public Material material;
     public KeyCode changeCol;
-    private bool attacking;
+    public bool attacking;
     public float cooldown;
     private float nextFireTime;
+    private float fuckyou;
 
     // Start is called before the first frame update
     void Start()
@@ -48,7 +50,20 @@ public class PlayerController : MonoBehaviour
             {
                 print("GO STUPID!");
                 nextFireTime = Time.time + cooldown;
-                material.color = myColor;
+                fuckyou = Time.time + (cooldown / 2);
+                print(nextFireTime);
+                print(fuckyou);
+                material.color = AttackColor;
+                attacking = true;
+            }
+        }
+        if(attacking){
+            if(Time.time > (fuckyou)){
+                material.color = initialColor;
+                attacking = false;
+                print("NOT ATTACKING ANYMORE!");
+                fuckyou = 0;
+                nextFireTime = 0;
             }
         }
     }
