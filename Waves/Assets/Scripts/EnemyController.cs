@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyController : MonoBehaviour
 {
@@ -13,13 +14,12 @@ public class EnemyController : MonoBehaviour
     Transform tf;
     float speed = 0.1f;
     Vector3 planetCenter = new Vector3(0.0f, 0.0f, 0.0f);
-    public UnityEngine.UI.Text texto;
 
+    public GameManager GameManager;
     
     // Start is called before the first frame update
     void Start()
     {
-        this.texto.text = "";
         rb = this.GetComponent<Rigidbody>(); 
         tf = this.GetComponent<Transform>();
         setVidasTexto();
@@ -50,8 +50,8 @@ public class EnemyController : MonoBehaviour
             setVidasTexto();
             if (vidas < 1)
             {
-                other.gameObject.SetActive(false);
-                this.texto.text = "YOU DIED";
+                //FindObjectOfType<GameManager>().GameOver();
+                GameManager.GameOver();
             }
         }
     }
