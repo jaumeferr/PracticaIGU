@@ -1,33 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour
 {
     public int vidas;
-    public UnityEngine.UI.Text texto_vidas;
+    GameObject texto_vidas;
 
     //public GameObject player;
-    public Rigidbody player;
+    Rigidbody player;
     Rigidbody rb;
     Transform tf;
     float speed = 0.1f;
     Vector3 planetCenter = new Vector3(0.0f, 0.0f, 0.0f);
-    public UnityEngine.UI.Text texto;
+    GameObject texto;
 
     
     // Start is called before the first frame update
     void Start()
     {
-        this.texto.text = "";
+        
         rb = this.GetComponent<Rigidbody>(); 
         tf = this.GetComponent<Transform>();
+        texto = GameObject.Find("Fin");
+        texto_vidas = GameObject.Find("Vidas");
         setVidasTexto();
-        //player = GameObject.Find("Player");
+        texto.GetComponent<Text>().text = "";
     }
 
     void FixedUpdate()
     {
+        player = GameObject.Find("Player").GetComponent<Rigidbody>();
+
         //ENEMY MOVEMENT
             //A --> Vector de C al enemigo, B --> Vector de C al jugador
         Vector3 v = Vector3.Cross(rb.position - planetCenter, player.position - planetCenter).normalized;
@@ -51,13 +56,13 @@ public class EnemyController : MonoBehaviour
             if (vidas < 1)
             {
                 other.gameObject.SetActive(false);
-                this.texto.text = "YOU DIED";
+                texto.GetComponent<Text>().text = "YOU DIED";
             }
         }
     }
 
     private void setVidasTexto()
     {
-        this.texto_vidas.text = "Vidas: " + vidas.ToString();
+        texto_vidas.GetComponent<Text>().text = "Vidas: " + vidas.ToString();
     }
 }
