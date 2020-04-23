@@ -15,8 +15,6 @@ public class EnemyController : MonoBehaviour
     Transform tf;
     float speed = 0.1f;
     Vector3 planetCenter = new Vector3(0.0f, 0.0f, 0.0f);
-
-    public GameManager GameManager;
     
     // Start is called before the first frame update
     void Start()
@@ -24,10 +22,8 @@ public class EnemyController : MonoBehaviour
         
         rb = this.GetComponent<Rigidbody>(); 
         tf = this.GetComponent<Transform>();
-        texto = GameObject.Find("Fin");
         texto_vidas = GameObject.Find("Vidas");
         setVidasTexto();
-        texto.GetComponent<Text>().text = "";
     }
 
     void FixedUpdate()
@@ -56,8 +52,7 @@ public class EnemyController : MonoBehaviour
             setVidasTexto();
             if (vidas < 1)
             {
-                //FindObjectOfType<GameManager>().GameOver();
-                GameManager.GameOver();
+                FindObjectOfType<GameManager>().GameOver();
             }
         }
     }
