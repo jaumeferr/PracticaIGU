@@ -39,6 +39,11 @@ public class EnemyController : MonoBehaviour
         Vector3 dir = Vector3.Cross(v, rb.position - planetCenter).normalized;
 
         //Mirar hacia el objetivo
+        /*RaycastHit hit;
+        if(Physics.Raycast(planetCenter, rb.position, out hit)){
+            Vector3 normal = hit.normal;
+        }*/
+
         Quaternion rotation = Quaternion.LookRotation((tf.position + dir * speed) - tf.position, Vector3.up);
         tf.rotation = rotation;
 

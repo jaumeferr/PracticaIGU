@@ -19,7 +19,7 @@ public class EnemySpawner : MonoBehaviour
         planet = GameObject.Find("Planet");
         player = GameObject.Find("Player");
 
-        radius = 40.0f;
+        radius = 41.0f;
         count = 15;
         SpawnEnemies(count);
     }
@@ -38,11 +38,14 @@ public class EnemySpawner : MonoBehaviour
         //Spawnear enemigos
         while(i > 0){
             //Generar angulo alfa/beta aleatorio
-            float beta = Random.Range(0.0f, 2 * Mathf.PI);
-            float alfa = Random.Range(0.0f, 2 * Mathf.PI);
+            float b = Random.Range(0.0f, 2 * Mathf.PI);
+            float a = Random.Range((-1)*Mathf.PI / 2, Mathf.PI/2);
 
+            float x = radius * Mathf.Cos(b) * Mathf.Cos(a);
+            float y = radius * Mathf.Cos(b) * Mathf.Sin(a);
+            float z = radius * Mathf.Sin(b);
             //Determinar x,y,z 
-            Vector3 newPos = new Vector3(planetRb.position.x + radius*Mathf.Cos(beta), planetRb.position.y + radius*Mathf.Sin(beta), planetRb.position.z + radius*Mathf.Cos(alfa));
+            Vector3 newPos = new Vector3(x,y,z);
 
             //Comprobar distancia segura respecto al jugador
             Vector3 enemyToPlayer = newPos - playerRb.position;
