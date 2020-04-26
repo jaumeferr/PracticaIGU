@@ -46,13 +46,18 @@ public class EnemyController : MonoBehaviour
     // Ataque enemigo
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" && !player.GetComponent<PlayerController>().attacking)
+        if (other.gameObject.tag == "Player")
         {
-            vidas = vidas - 1;
-            setVidasTexto();
-            if (vidas < 1)
-            {
-                FindObjectOfType<GameManager>().GameOver();
+            // Si el player no tiene la habilidad activada, le quitamos vida
+            if (!player.GetComponent<PlayerController>().attacking){
+                vidas = vidas - 1;
+                setVidasTexto();
+                if (vidas < 1)
+                {
+                    FindObjectOfType<GameManager>().GameOver();
+                }
+            }else{
+                Destroy(this.gameObject);
             }
         }
     }
