@@ -24,7 +24,7 @@ public class EnemySpawner : MonoBehaviour
         SpawnEnemies(count);
     }
 
-    // Update is called once per frame9
+    // Update is called once per frame
     void Update()
     {
         
@@ -49,13 +49,6 @@ public class EnemySpawner : MonoBehaviour
 
             //Comprobar distancia segura respecto al jugador
             Vector3 enemyToPlayer = newPos - playerRb.position;
-
-            Debug.Log(
-                enemyToPlayer.magnitude
-            );
-            Debug.Log(
-                newPos
-            );
 
             if(enemyToPlayer.magnitude > 5){
                 //Generar enemigo

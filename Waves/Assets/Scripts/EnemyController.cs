@@ -36,11 +36,6 @@ public class EnemyController : MonoBehaviour
         Vector3 dir = Vector3.Cross(v, rb.position - planetCenter).normalized;
 
         //Mirar hacia el objetivo
-        /*RaycastHit hit;
-        if(Physics.Raycast(planetCenter, rb.position, out hit)){
-            Vector3 normal = hit.normal;
-        }*/
-
         Quaternion rotation = Quaternion.LookRotation((tf.position + dir * speed) - tf.position, Vector3.up);
         tf.rotation = rotation;
 
@@ -51,13 +46,18 @@ public class EnemyController : MonoBehaviour
     // Ataque enemigo
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" && !player.GetComponent<PlayerController>().attacking)
+        if (other.gameObject.tag == "Player")
         {
-            vidas = vidas - 1;
-            setVidasTexto();
-            if (vidas < 1)
-            {
-                FindObjectOfType<GameManager>().GameOver();
+            // Si el player no tiene la habilidad activada, le quitamos vida
+            if (!player.GetComponent<PlayerController>().attacking){
+                vidas = vidas - 1;
+                setVidasTexto();
+                if (vidas < 1)
+                {
+                    FindObjectOfType<GameManager>().GameOver();
+                }
+            }else{
+                Destroy(this.gameObject);
             }
         }
     }
