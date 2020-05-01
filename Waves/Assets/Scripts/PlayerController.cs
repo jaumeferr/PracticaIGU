@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float playerSpeed = 8f;
-    float torqueSpeed = 1000f;
+    public float sensibility = 1;
     public bool paperFound = false;
     public int score = 0;
 
@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     Vector3 smoothMoveSpeed;
     
     Rigidbody rb;
+    Transform tf;
 
     enum PlayerState
     {
@@ -34,16 +35,24 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = this.GetComponent<Rigidbody>();
+        tf = this.GetComponent<Transform>();
         attacking = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
+        //Movimiento adelante y atrás
+        float moveHorizontal = Input.GetAxisRaw("Horizontal");
+        float moveVertical = Input.GetAxisRaw("Vertical");
+        Vector3 moveDir = new Vector3(0, 0, moveVertical).normalized;
+
         Vector3 targetMoveAmount = moveDir * playerSpeed;
         moveAmount = Vector3.SmoothDamp(moveAmount, targetMoveAmount, ref smoothMoveSpeed, .15f);
-        rb.MovePosition(rb.position + this.GetComponent<Transform>().TransformDirection(moveAmount) * Time.fixedDeltaTime);
+
+        //Move and face movement direction
+        rb.MovePosition(rb.position + tf.TransformDirection(moveAmount) * Time.fixedDeltaTime);
+        tf.Rotate(0,moveHorizontal,0);
 
         if(Time.time > nextFireTime){
             if (Input.GetKeyDown(changeCol))
