@@ -51,6 +51,7 @@ public class Planet : MonoBehaviour
                 meshObj.transform.parent = transform;
 
                 meshObj.AddComponent<MeshRenderer>().sharedMaterial = new Material(Shader.Find("Standard"));
+                meshObj.AddComponent<MeshCollider>();   
                 meshFilters[i] = meshObj.AddComponent<MeshFilter>();
                 meshFilters[i].sharedMesh = new Mesh();
             }
@@ -88,15 +89,6 @@ public class Planet : MonoBehaviour
         foreach (TerrainFace face in terrainFaces)
         {
             face.ConstructMesh();
-        }
-
-        //Add mesh collider
-        GameObject[] planetFaces = GameObject.FindGameObjectsWithTag("PlanetFace");
-        if(planetFaces != null){
-            foreach (GameObject item in planetFaces)
-            {
-             item.AddComponent<MeshCollider>();   
-            }
         }
     }
 
