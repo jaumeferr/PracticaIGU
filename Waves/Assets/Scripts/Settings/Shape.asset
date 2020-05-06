@@ -9,28 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd61a47e8184764468b8f85e943394ae, type: 3}
+  m_Script: {fileID: 11500000, guid: a1e152fe0677abc47979484e4ec39701, type: 3}
   m_Name: Shape
   m_EditorClassIdentifier: 
   planetRadius: 40
-  noiseLayers:
-  - enable: 1
-    useFirstLayerAsMask: 0
-    noiseSettings:
-      strength: 0.2
-      numLayers: 2
-      baseRoughness: 0.5
-      roughness: 3.5
-      persistance: 0.27
-      centre: {x: 0, y: 0, z: 0}
-      minValue: 0
-  - enable: 1
-    useFirstLayerAsMask: 1
-    noiseSettings:
-      strength: 0.8
-      numLayers: 2
-      baseRoughness: 0.7
-      roughness: 2
-      persistance: 0.1
-      centre: {x: 0, y: 0, z: 0}
-      minValue: 0

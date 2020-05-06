@@ -11,7 +11,7 @@ public class ShapeSettings : ScriptableObject
     //[System.Serializable]
     public ShapeSettings(){
         this.planetRadius = 40;
-        this.noiseLayers = new NoiseLayer[2];
+        this.noiseLayers = new NoiseLayer[1];
     }
 
     public void InitializeNoiseLayers(){
@@ -36,7 +36,7 @@ public class ShapeSettings : ScriptableObject
             0);
 
         noiseLayers[0] = new NoiseLayer(noiseSettings1, false);
-        noiseLayers[1] = new NoiseLayer(noiseSettings2, true);
+        //noiseLayers[1] = new NoiseLayer(noiseSettings2, true);
     }
     public class NoiseLayer{
         public bool enable = true;
