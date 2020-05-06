@@ -6,21 +6,16 @@ public class Planet : MonoBehaviour
 {
     //[Range(2, 256)]
     public int resolution = 100;
-    public bool autoUpdate = true;
 
+    [HideInInspector]
     public ShapeSettings shapeSettings;
-    public ColourSettings colourSettings;
-
-    [HideInInspector]
-    public bool shapeSettingsFoldout;
-    [HideInInspector]
-    public bool colourSettingsFoldout;
 
     ShapeGenerator shapeGenerator;
 
     [SerializeField, HideInInspector]
     MeshFilter[] meshFilters;
     TerrainFace[] terrainFaces;
+    Color rdPlanetColor;
 
     private void OnValidate()
     {
@@ -31,14 +26,11 @@ public class Planet : MonoBehaviour
     {
         //InitializeShapeSettings();
         shapeSettings = new ShapeSettings();
-        shapeSettings.InitializeNoiseLayers();
+        shapeSettings.InitializeNoiseLayer();
 
         shapeGenerator = new ShapeGenerator(shapeSettings);
-        if (meshFilters == null || meshFilters.Length == 0)
-        {
-            meshFilters = new MeshFilter[6];
-        }
 
+        meshFilters = new MeshFilter[6];
         terrainFaces = new TerrainFace[6];
 
         Vector3[] directions = { Vector3.up, Vector3.down, Vector3.left, Vector3.right, Vector3.forward, Vector3.back };
@@ -47,11 +39,11 @@ public class Planet : MonoBehaviour
         {
             if (meshFilters[i] == null)
             {
-                GameObject meshObj = new GameObject("mesh");
+                GameObject meshObj = new GameObject("PlanetFace_" + i);
                 meshObj.transform.parent = transform;
 
                 meshObj.AddComponent<MeshRenderer>().sharedMaterial = new Material(Shader.Find("Standard"));
-                meshObj.AddComponent<MeshCollider>();   
+                meshObj.AddComponent<MeshCollider>();
                 meshFilters[i] = meshObj.AddComponent<MeshFilter>();
                 meshFilters[i].sharedMesh = new Mesh();
             }
@@ -66,24 +58,6 @@ public class Planet : MonoBehaviour
         GenerateColours();
     }
 
-    public void OnShapeSettingsUpdated()
-    {
-        if (autoUpdate)
-        {
-            Initialize();
-            GenerateMesh();
-        }
-    }
-
-    public void OnColourSettingsUpdated()
-    {
-        if (autoUpdate)
-        {
-            Initialize();
-            GenerateColours();
-        }
-    }
-
     void GenerateMesh()
     {
         foreach (TerrainFace face in terrainFaces)
@@ -94,16 +68,10 @@ public class Planet : MonoBehaviour
 
     void GenerateColours()
     {
+        rdPlanetColor = new Color((float)Random.Range(0, 255), (float)Random.Range(0, 255), (float)Random.Range(0, 255));
         foreach (MeshFilter m in meshFilters)
         {
-            Color rdPlanetColor = new Color((float)Random.Range(0,255), (float)Random.Range(0,255), (float)Random.Range(0,255));
-            //m.GetComponent<MeshRenderer>().sharedMaterial.color = rdPlanetColor;
-
-            m.GetComponent<MeshRenderer>().sharedMaterial.color = colourSettings.planetColour;
+            m.GetComponent<MeshRenderer>().sharedMaterial.color = rdPlanetColor;
         }
-    }
-
-    void InitializeShapeSettings(){
-        //this.shapeSettings = new ShapeSettings();
     }
 }

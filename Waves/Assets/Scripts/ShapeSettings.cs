@@ -6,46 +6,35 @@ using UnityEngine;
 public class ShapeSettings : ScriptableObject
 {
     public float planetRadius;
-    public NoiseLayer[] noiseLayers;
-    
+    public NoiseLayer noiseLayer;
+
     //[System.Serializable]
-    public ShapeSettings(){
+    public ShapeSettings()
+    {
         this.planetRadius = 40;
-        this.noiseLayers = new NoiseLayer[1];
     }
 
-    public void InitializeNoiseLayers(){
+    public void InitializeNoiseLayer()
+    {
         //Initialize NoiseLayer 1
-        NoiseSettings noiseSettings1 = new NoiseSettings(
-            (float)Random.Range(0.15f,0.25f), 
-            2, 
-            (float)Random.Range(0.5f, 0.6f), 
-            (float)Random.Range(3.3f, 3.7f), 
-            (float)Random.Range(0.2f, 0.3f), 
-            Vector3.zero, 
+        NoiseSettings noiseSettings = new NoiseSettings(
+            (float)Random.Range(0.15f, 0.25f),
+            2,
+            (float)Random.Range(0.5f, 0.6f),
+            (float)Random.Range(3.3f, 3.7f),
+            (float)Random.Range(0.2f, 0.3f),
+            Vector3.zero,
             0);
 
-        //Initialize Noise Layer 2
-        NoiseSettings noiseSettings2 = new NoiseSettings(
-            (float)Random.Range(0.5f,1), 
-            2, 
-            (float)Random.Range(0.4f,1), 
-            2, 
-            (float)Random.Range(0.1f, 0.3f), 
-            Vector3.zero, 
-            0);
-
-        noiseLayers[0] = new NoiseLayer(noiseSettings1, false);
-        //noiseLayers[1] = new NoiseLayer(noiseSettings2, true);
+        noiseLayer = new NoiseLayer(noiseSettings);
     }
-    public class NoiseLayer{
-        public bool enable = true;
-        public bool useFirstLayerAsMask;
+    public class NoiseLayer
+    {
         public NoiseSettings noiseSettings;
 
-        public NoiseLayer(NoiseSettings noiseSettings, bool useFirstLayerAsMask){
+        public NoiseLayer(NoiseSettings noiseSettings)
+        {
             this.noiseSettings = noiseSettings;
-            this.useFirstLayerAsMask = useFirstLayerAsMask;
         }
     }
 }
