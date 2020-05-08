@@ -6,6 +6,7 @@ public class Planet : MonoBehaviour
 {
     //[Range(2, 256)]
     public int resolution = 100;
+    public float planetRadius = 40.0f;
 
     [HideInInspector]
     public ShapeSettings shapeSettings;
@@ -15,22 +16,34 @@ public class Planet : MonoBehaviour
     [SerializeField, HideInInspector]
     MeshFilter[] meshFilters;
     TerrainFace[] terrainFaces;
-    Color rdPlanetColor;
+    public Color planetColor = Color.black;
+    EnemySpawner enemySpawner;
 
     private void OnValidate()
     {
         GeneratePlanet();
+        //Generate Vegetation
+    }
+
+    private void Start()
+    {
+        //Spawn Enemies
+        enemySpawner = new EnemySpawner(GameObject.Find("Planet"), GameObject.Find("Player"));
+        enemySpawner.SpawnEnemies();
     }
 
     void Initialize()
     {
         //InitializeShapeSettings();
-        shapeSettings = new ShapeSettings();
+        shapeSettings = new ShapeSettings(planetRadius);
         shapeSettings.InitializeNoiseLayer();
 
         shapeGenerator = new ShapeGenerator(shapeSettings);
 
-        meshFilters = new MeshFilter[6];
+        if (meshFilters == null || meshFilters.Length == 0)
+        {
+            meshFilters = new MeshFilter[6];
+        }
         terrainFaces = new TerrainFace[6];
 
         Vector3[] directions = { Vector3.up, Vector3.down, Vector3.left, Vector3.right, Vector3.forward, Vector3.back };
@@ -39,15 +52,18 @@ public class Planet : MonoBehaviour
         {
             if (meshFilters[i] == null)
             {
-                GameObject meshObj = new GameObject("PlanetFace_" + i);
+                GameObject meshObj = new GameObject("mesh");
+                meshObj.tag = "PlanetFace";
                 meshObj.transform.parent = transform;
 
                 meshObj.AddComponent<MeshRenderer>().sharedMaterial = new Material(Shader.Find("Standard"));
-                meshObj.AddComponent<MeshCollider>();
                 meshFilters[i] = meshObj.AddComponent<MeshFilter>();
                 meshFilters[i].sharedMesh = new Mesh();
             }
             terrainFaces[i] = new TerrainFace(shapeGenerator, meshFilters[i].sharedMesh, resolution, directions[i]);
+
+            meshFilters[i].gameObject.SetActive(true);
+
         }
     }
 
@@ -68,10 +84,13 @@ public class Planet : MonoBehaviour
 
     void GenerateColours()
     {
-        rdPlanetColor = new Color((float)Random.Range(0, 255), (float)Random.Range(0, 255), (float)Random.Range(0, 255));
-        foreach (MeshFilter m in meshFilters)
+        //rdPlanetColor = new Color((float)Random.Range(0, 255), (float)Random.Range(0, 255), (float)Random.Range(0, 255));
+
+        GameObject[] faces = GameObject.FindGameObjectsWithTag("PlanetFace");
+        foreach (GameObject face in faces)
         {
-            m.GetComponent<MeshRenderer>().sharedMaterial.color = rdPlanetColor;
+            face.GetComponent<Renderer>().sharedMaterial.EnableKeyword("_EMISSION");
+            face.GetComponent<Renderer>().sharedMaterial.SetColor("_EmissionColor", planetColor);
         }
     }
 }

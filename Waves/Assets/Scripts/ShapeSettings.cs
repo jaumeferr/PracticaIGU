@@ -9,9 +9,9 @@ public class ShapeSettings : ScriptableObject
     public NoiseLayer noiseLayer;
 
     //[System.Serializable]
-    public ShapeSettings()
+    public ShapeSettings(float planetRadius)
     {
-        this.planetRadius = 40;
+        this.planetRadius = planetRadius;
     }
 
     public void InitializeNoiseLayer()
