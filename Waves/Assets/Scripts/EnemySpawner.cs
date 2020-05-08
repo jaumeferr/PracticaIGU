@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawner : ScriptableObject
+public class EnemySpawner : MonoBehaviour
 {
     public int count;
 
@@ -14,14 +14,17 @@ public class EnemySpawner : ScriptableObject
     private float radius;
 
     // Start is called before the first frame update
-    public EnemySpawner(GameObject planet, GameObject player)
+    
+    void Start()
     {
-        this.planet = planet;
-        this.player = player;
+        this.planet = GameObject.Find("Planet");
+        this.player = GameObject.Find("Player");
 
         planetCenter = planet.GetComponent<Transform>().position;
         radius = 41.0f;
         count = 15;
+
+        SpawnEnemies();
     }
 
     public void SpawnEnemies()

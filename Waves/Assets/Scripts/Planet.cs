@@ -24,14 +24,7 @@ public class Planet : MonoBehaviour
         GeneratePlanet();
         //Generate Vegetation
     }
-
-    private void Start()
-    {
-        //Spawn Enemies
-        enemySpawner = new EnemySpawner(GameObject.Find("Planet"), GameObject.Find("Player"));
-        enemySpawner.SpawnEnemies();
-    }
-
+    
     void Initialize()
     {
         //InitializeShapeSettings();
