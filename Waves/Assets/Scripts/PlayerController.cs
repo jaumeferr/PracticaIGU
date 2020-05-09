@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     public bool attacking;
     public float cooldown;
     private float nextFireTime;
-    private float fuckyou;
+    private float attackTime;
 
     // Start is called before the first frame update
     void Start()
@@ -57,21 +57,23 @@ public class PlayerController : MonoBehaviour
         if(Time.time > nextFireTime){
             if (Input.GetKeyDown(changeCol))
             {
-                print("GO STUPID!");
                 nextFireTime = Time.time + cooldown;
-                fuckyou = Time.time + (cooldown / 2);
-                print(nextFireTime);
-                print(fuckyou);
-                material.color = AttackColor;
+                attackTime = Time.time + (cooldown / 2);
+                //material.color = AttackColor;
+
+                this.GetComponent<Renderer>().sharedMaterial.EnableKeyword("_EMISSION");
+                this.GetComponent<Renderer>().sharedMaterial.SetColor("_EmissionColor", AttackColor);
+
                 attacking = true;
             }
         }
         if(attacking){
-            if(Time.time > (fuckyou)){
-                material.color = initialColor;
+            if(Time.time > (attackTime)){
+                //material.color = initialColor;
+                this.GetComponent<Renderer>().sharedMaterial.EnableKeyword("_EMISSION");
+                this.GetComponent<Renderer>().sharedMaterial.SetColor("_EmissionColor", initialColor);
                 attacking = false;
-                print("NOT ATTACKING ANYMORE!");
-                fuckyou = 0;
+                attackTime = 0;
                 nextFireTime = 0;
             }
         }

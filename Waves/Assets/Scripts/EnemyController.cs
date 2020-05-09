@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class EnemyController : MonoBehaviour
 {
     public int vidas;
+    public int muertos;
     GameObject texto_vidas;
 
     //public GameObject player;
@@ -57,7 +58,14 @@ public class EnemyController : MonoBehaviour
                     FindObjectOfType<GameManager>().GameOver();
                 }
             }else{
-                Destroy(this.gameObject);
+                muertos = muertos - 1;
+                if (muertos == 0)
+                {
+                    FindObjectOfType<GameManager>().Victory();
+                }else{
+                    print(muertos);
+                    Destroy(this.gameObject);
+                }
             }
         }
     }
