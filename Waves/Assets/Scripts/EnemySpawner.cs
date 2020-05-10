@@ -46,15 +46,18 @@ public class EnemySpawner : MonoBehaviour
             //Determinar x,y,z 
             Vector3 dir = new Vector3(x, y, z);
 
-            //Raycast a algún punto de la superficie del planeta
-            RaycastHit hit;
 
-            if (Physics.Raycast(planetCenter, dir, out hit))
+            //ESTO NO FUNCIONA XD 
+            /*//Raycast a algún punto de la superficie del planeta
+            RaycastHit hit;
+                Debug.DrawRay(planetCenter, dir * 100, Color.red, 60);
+
+            if (Physics.Raycast(planetCenter, dir, out hit, Mathf.Infinity))
             {
                 //Comprobar distancia segura respecto al jugador
                 Vector3 enemyToPlayer = hit.point - playerRb.position;
 
-                if (enemyToPlayer.magnitude > 5)
+                if (enemyToPlayer.magnitude > 2)
                 {
                     //Generar enemigo
                     Instantiate(prefabEnemy, hit.point + hit.point.normalized, Quaternion.identity);
@@ -63,7 +66,14 @@ public class EnemySpawner : MonoBehaviour
                 }
             }
 
-            i--;
+            i--; */
+
+            Vector3 spawnPoint = dir.normalized * 50;
+
+            if((spawnPoint - playerRb.position).magnitude > 2){
+                Instantiate(prefabEnemy, spawnPoint, Quaternion.identity);
+                i--;
+            }
         }
     }
 }
