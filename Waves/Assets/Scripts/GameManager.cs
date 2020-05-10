@@ -26,4 +26,17 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene("Menu");
     }
+
+    public void Victory()
+    {
+        SceneManager.LoadScene("Victoria");
+    }
+
+    public void NextLvl()
+    {
+        //Miramos la escena en la que estamos y si estamos en la primera que nos
+        //mande a la segunda
+
+        SceneManager.LoadScene("SampleScene");
+    }
 }
