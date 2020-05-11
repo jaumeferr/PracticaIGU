@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class TerrainGeneration : MonoBehaviour
 {
-    [Range(0,300)]
-    public int numTrees;
-    public Transform prefabTree;
-
     GenerateVegetation vegetation;
-    void Initialize() 
+
+    public Transform tree;
+
+    private void OnValidate()
     {
-        vegetation = new GenerateVegetation(prefabTree, numTrees);
-        vegetation.GenerateTrees();
+        vegetation = new GenerateVegetation(tree);
+        Generate();
+    }
+
+
+    public void Generate()
+    {
+        vegetation.Generate();
     }
 }

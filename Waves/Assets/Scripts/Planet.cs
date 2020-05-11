@@ -22,7 +22,6 @@ public class Planet : MonoBehaviour
     private void OnValidate()
     {
         GeneratePlanet();
-        //Generate Vegetation
     }
     
     void Initialize()

@@ -5,17 +5,25 @@ using UnityEngine;
 public class GenerateVegetation : ScriptableObject
 {
     [Range(0, 300)]
-    int numTrees;
+    public int numTrees;
     private Vector3[] treesPosition;
-    Transform prefabTree;
+    private Transform terrainSeed;
+    private Transform prefabTree;
 
-    public GenerateVegetation(Transform prefabTree, int numTrees)
+    public GenerateVegetation(Transform tree)
     {
-        this.prefabTree = prefabTree;
-        this.numTrees = numTrees;
+        this.prefabTree = tree;
+        this.numTrees = 20;
     }
-    public void GenerateTrees()
+    public void Generate()
     {
+        //Limpiar el mapa de posibles árboles generados
+        Transform terrainSeed = GameObject.Find("TerrainSeed").GetComponent<Transform>(); 
+        for (int i = 0; i < terrainSeed.childCount; i++)
+        {
+            Destroy(terrainSeed.GetChild(i).gameObject);
+        }
+
         Vector3 planetCenter = Vector3.zero;
         int treeCount = 0;
         treesPosition = new Vector3[numTrees];
@@ -24,45 +32,39 @@ public class GenerateVegetation : ScriptableObject
         {
             //Generar angulos a,b aleatorios
             //Futuro --> Generar zonas con especial concentración de árboles.
-            float a = Random.Range(0.0f, 2 * Mathf.PI);
-            float b = Random.Range((-1) * Mathf.PI / 2, Mathf.PI / 2);
+            float alfa = Random.Range(0.0f, 2 * Mathf.PI);
+            float beta = Random.Range((-1) * Mathf.PI / 2, Mathf.PI / 2);
 
             //Set new tree position when a,b are given
-            float x = Mathf.Cos(b) * Mathf.Cos(a);
-            float y = Mathf.Cos(b) * Mathf.Sin(a);
-            float z = Mathf.Sin(b);
+            float treeX = Mathf.Cos(beta) * Mathf.Cos(alfa);
+            float treeY = Mathf.Cos(beta) * Mathf.Sin(alfa);
+            float treeZ = Mathf.Sin(beta);
 
-            Vector3 dir = new Vector3(x, y, z);
+            Vector3 dirTree = new Vector3(treeX, treeY, treeZ);
 
             //Raycast a algún punto de la superficie del planeta
-            RaycastHit hit;
+            RaycastHit treePos;
+            //Debug.DrawRay(planetCenter, dirTree * 100, Color.red, 1000);
 
-            if (Physics.Raycast(planetCenter, dir, out hit))
+            if (Physics.Raycast(planetCenter, dirTree, out treePos))
             {
-                bool tooNear = false;
-
-                if (treesPosition[0] != null)
-                {
-                    //Comprobar que el arbol no está muy cerca de otros árboles
-                    for (int i = 0; i < treesPosition.Length && !tooNear; i++)
+                
+                //Comprobar que no está cerca de los otros árboles
+                bool tooClose = false;
+                if(treeCount > 0){
+                    for (int i = 0; i < treeCount && !tooClose; i++)
                     {
-                        if ((treesPosition[i] - hit.point).magnitude < 2)
-                        {
-                            tooNear = true;
+                        if((treePos.point - treesPosition[i]).magnitude > 10){
+                            tooClose = true;
                         }
                     }
                 }
 
-                if (!tooNear)
-                {
-                    //Colocar árbol en la posición indicada
-                    //Añadir colliders, rigidbody -> isKinematic
-                    Debug.Log("Tree: " + hit.point);
-                    Instantiate(prefabTree, hit.point + hit.point.normalized, Quaternion.identity);
-                    //Orientar árbol verticalmente
-
-                    treesPosition[treeCount] = hit.point + hit.point.normalized;
-                    treeCount++;
+                //Si es el primero o no está muy cerca lo podemos generar
+                if(!tooClose){
+                    Instantiate(prefabTree, treePos.point, Quaternion.Euler(treePos.normal), GameObject.Find("TerrainSeed").GetComponent<Transform>());
+                    treesPosition[treeCount] = treePos.point;
+                    treeCount ++;
                 }
             }
         }
