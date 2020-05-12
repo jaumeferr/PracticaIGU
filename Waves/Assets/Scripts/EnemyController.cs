@@ -64,7 +64,7 @@ public class EnemyController : MonoBehaviour
                     FindObjectOfType<GameManager>().Victory();
                 }else{
                     print(muertos);
-                    DestroyImmediate(this.gameObject);
+                    Destroy(this.gameObject);
                 }
             }
         }
