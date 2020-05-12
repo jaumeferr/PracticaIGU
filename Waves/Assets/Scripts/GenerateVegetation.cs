@@ -62,11 +62,13 @@ public class GenerateVegetation : ScriptableObject
 
                 //Si es el primero o no está muy cerca lo podemos generar
                 if(!tooClose){
-                    Instantiate(prefabTree, treePos.point, Quaternion.Euler(treePos.normal), GameObject.Find("TerrainSeed").GetComponent<Transform>());
+                    Instantiate(prefabTree, treePos.point, Quaternion.FromToRotation(Vector3.up, dirTree), GameObject.Find("TerrainSeed").GetComponent<Transform>());
                     treesPosition[treeCount] = treePos.point;
                     treeCount ++;
                 }
             }
         }
+
+        int idasd = 0;
     }
 }

@@ -8,10 +8,10 @@ public class TerrainGeneration : MonoBehaviour
 
     public Transform tree;
 
-    private void OnValidate()
+   private void Awake() 
     {
         vegetation = new GenerateVegetation(tree);
-        Generate();
+        //Generate();
     }
 
 
