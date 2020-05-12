@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2534678050282520128}
   - component: {fileID: 2534678050282520129}
   - component: {fileID: 2534678050282520158}
+  - component: {fileID: 306730355477927710}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -137,6 +138,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vidas: 3
-  texto_vidas: {fileID: 0}
-  player: {fileID: 0}
-  texto: {fileID: 0}
+  muertos: 10
+--- !u!65 &306730355477927710
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2534678050282520159}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

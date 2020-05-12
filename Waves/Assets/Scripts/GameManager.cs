@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     // Empezar la partida
     public void StartGame()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene("SampleScene"); //DUMBASS NAME para Level01   
     }
 

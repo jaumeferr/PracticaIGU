@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,6 +17,7 @@ public class PlayerController : MonoBehaviour
     
     Rigidbody rb;
     Transform tf;
+    GameObject texto_vidas;
 
     enum PlayerState
     {
@@ -26,7 +29,11 @@ public class PlayerController : MonoBehaviour
     public Color AttackColor;
     public Material material;
     public KeyCode changeCol;
+
     public bool attacking;
+    public int vidas;
+    public int muertos;
+
     public float cooldown;
     private float nextFireTime;
     private float attackTime;
@@ -37,6 +44,10 @@ public class PlayerController : MonoBehaviour
         rb = this.GetComponent<Rigidbody>();
         tf = this.GetComponent<Transform>();
         attacking = false;
+        this.GetComponent<Renderer>().sharedMaterial.EnableKeyword("_EMISSION");
+        this.GetComponent<Renderer>().sharedMaterial.SetColor("_EmissionColor", initialColor);
+        texto_vidas = GameObject.Find("Vidas");
+        setVidasTexto();
     }
 
     // Update is called once per frame
@@ -77,6 +88,34 @@ public class PlayerController : MonoBehaviour
                 nextFireTime = 0;
             }
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Enemy")
+        {
+            if(!attacking)
+            {
+                vidas = vidas - 1;
+                setVidasTexto();
+                if (vidas < 1)
+                {
+                    FindObjectOfType<GameManager>().GameOver();
+                }
+            } else 
+            {
+                muertos = muertos - 1;
+                if (muertos == 0)
+                {
+                    FindObjectOfType<GameManager>().Victory();
+                }
+            }
+        }
+    }
+
+    private void setVidasTexto()
+    {
+        texto_vidas.GetComponent<Text>().text = "Vidas: " + vidas.ToString();
     }
 
     void addPoints(int points)

@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour
 {
-    public int vidas;
-    public int muertos;
-    GameObject texto_vidas;
 
     //public GameObject player;
     Rigidbody player;
@@ -23,8 +20,6 @@ public class EnemyController : MonoBehaviour
         
         rb = this.GetComponent<Rigidbody>(); 
         tf = this.GetComponent<Transform>();
-        texto_vidas = GameObject.Find("Vidas");
-        setVidasTexto();
     }
 
     void FixedUpdate()
@@ -49,29 +44,12 @@ public class EnemyController : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            
             // Si el player no tiene la habilidad activada, le quitamos vida
-            if (!player.GetComponent<PlayerController>().attacking){
-                vidas = vidas - 1;
-                setVidasTexto();
-                if (vidas < 1)
-                {
-                    FindObjectOfType<GameManager>().GameOver();
-                }
-            }else{
-                muertos = muertos - 1;
-                if (muertos == 0)
-                {
-                    FindObjectOfType<GameManager>().Victory();
-                }else{
-                    print(muertos);
-                    Destroy(this.gameObject);
-                }
+            if (player.GetComponent<PlayerController>().attacking){
+                Destroy(this.gameObject);
             }
         }
     }
 
-    private void setVidasTexto()
-    {
-        texto_vidas.GetComponent<Text>().text = "Vidas: " + vidas.ToString();
-    }
 }
