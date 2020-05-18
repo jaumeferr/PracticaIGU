@@ -11,12 +11,7 @@ public class TerrainGeneration : MonoBehaviour
    private void Awake() 
     {
         vegetation = new GenerateVegetation(tree);
-        //Generate();
-    }
-
-
-    public void Generate()
-    {
         vegetation.Generate();
     }
+
 }

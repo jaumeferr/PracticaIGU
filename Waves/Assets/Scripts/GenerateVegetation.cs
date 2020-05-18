@@ -9,24 +9,42 @@ public class GenerateVegetation : ScriptableObject
     private Vector3[] treesPosition;
     private Transform terrainSeed;
     private Transform prefabTree;
+    Vector3 planetCenter = Vector3.zero;
 
     public GenerateVegetation(Transform tree)
     {
         this.prefabTree = tree;
-        this.numTrees = 20;
+        this.numTrees = 2;
     }
     public void Generate()
     {
+        treesPosition = new Vector3[numTrees];
+        Vector3 planetCenter = Vector3.zero;
+
+        //Limpiar terreno
+        this.CleanTerrain();
+
+        //Generar todos los puntos de posiciamiento de árboles
+        this.GenerateTrees();
+    }
+
+    private void CleanTerrain()
+    {
+
         //Limpiar el mapa de posibles árboles generados
-        Transform terrainSeed = GameObject.Find("TerrainSeed").GetComponent<Transform>(); 
+        Transform terrainSeed = GameObject.Find("TerrainSeed").GetComponent<Transform>();
         for (int i = 0; i < terrainSeed.childCount; i++)
         {
             Destroy(terrainSeed.GetChild(i).gameObject);
         }
+    }
 
-        Vector3 planetCenter = Vector3.zero;
+    private void GenerateTrees()
+    {
         int treeCount = 0;
-        treesPosition = new Vector3[numTrees];
+        
+        //Index of closest tree in trees array
+        int closeTree;
 
         while (treeCount < numTrees)
         {
@@ -42,33 +60,55 @@ public class GenerateVegetation : ScriptableObject
 
             Vector3 dirTree = new Vector3(treeX, treeY, treeZ);
 
-            //Raycast a algún punto de la superficie del planeta
+            //Comprobar que la posición es válida respecto a la posición de los otros árboles.
             RaycastHit treePos;
-            //Debug.DrawRay(planetCenter, dirTree * 100, Color.red, 1000);
+            
+            Debug.DrawLine(planetCenter, dirTree * 100, Color.yellow, 30);
 
-            if (Physics.Raycast(planetCenter, dirTree, out treePos))
+            Ray treeRay = new Ray(planetCenter, dirTree);
+
+            if (Physics.Raycast(treeRay, out treePos))
             {
-                
                 //Comprobar que no está cerca de los otros árboles
                 bool tooClose = false;
-                if(treeCount > 0){
+                if (treeCount > 0)
+                {
                     for (int i = 0; i < treeCount && !tooClose; i++)
                     {
-                        if((treePos.point - treesPosition[i]).magnitude > 10){
+                        if ((treePos.point - treesPosition[i]).magnitude < 3)
+                        {
                             tooClose = true;
+
+                            /*
+                            if(!treesPosition[i].AlreadyScaled()){
+                                closeTree = i;
+                            }
+                            */
                         }
                     }
                 }
 
                 //Si es el primero o no está muy cerca lo podemos generar
-                if(!tooClose){
-                    Instantiate(prefabTree, treePos.point, Quaternion.FromToRotation(Vector3.up, dirTree), GameObject.Find("TerrainSeed").GetComponent<Transform>());
+                if (!tooClose)
+                {
                     treesPosition[treeCount] = treePos.point;
-                    treeCount ++;
+                    Instantiate(prefabTree, treePos.point, Quaternion.FromToRotation(Vector3.up, dirTree), GameObject.Find("TerrainSeed").GetComponent<Transform>());    
+
+                } else{
+                    /*Hacer árbol cercano más grande
+                    treesPosition[i].Grow();
+                    */
+                    
                 }
             }
-        }
 
-        int idasd = 0;
+            else
+            {
+                Debug.Log("Returns false");
+            }
+
+            treeCount++;
+
+        }
     }
 }
