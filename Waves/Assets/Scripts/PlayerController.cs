@@ -17,26 +17,19 @@ public class PlayerController : MonoBehaviour
     
     Rigidbody rb;
     Transform tf;
-    GameObject texto_vidas;
 
     enum PlayerState
     {
         Walk, Attack, Jump
     }
 
-    //Color al atacar
-    public Color initialColor;
-    public Color AttackColor;
-    public Material material;
-    public KeyCode changeCol;
 
     public bool attacking;
+    public SkillBarController skillBar;
+
+    public HealthBar healthBar;
     public int vidas;
     public int muertos;
-
-    public float cooldown;
-    private float nextFireTime;
-    private float attackTime;
 
     // Start is called before the first frame update
     void Start()
@@ -44,10 +37,8 @@ public class PlayerController : MonoBehaviour
         rb = this.GetComponent<Rigidbody>();
         tf = this.GetComponent<Transform>();
         attacking = false;
-        this.GetComponent<Renderer>().sharedMaterial.EnableKeyword("_EMISSION");
-        this.GetComponent<Renderer>().sharedMaterial.SetColor("_EmissionColor", initialColor);
-        texto_vidas = GameObject.Find("Vidas");
-        setVidasTexto();
+        skillBar.SetAttackBar();
+        healthBar.SetMaxHealth(vidas);
     }
 
     // Update is called once per frame
@@ -64,30 +55,6 @@ public class PlayerController : MonoBehaviour
         //Move and face movement direction
         rb.MovePosition(rb.position + tf.TransformDirection(moveAmount) * Time.fixedDeltaTime);
         tf.Rotate(0,moveHorizontal,0);
-
-        if(Time.time > nextFireTime){
-            if (Input.GetKeyDown(changeCol))
-            {
-                nextFireTime = Time.time + cooldown;
-                attackTime = Time.time + (cooldown / 2);
-                //material.color = AttackColor;
-
-                this.GetComponent<Renderer>().sharedMaterial.EnableKeyword("_EMISSION");
-                this.GetComponent<Renderer>().sharedMaterial.SetColor("_EmissionColor", AttackColor);
-
-                attacking = true;
-            }
-        }
-        if(attacking){
-            if(Time.time > (attackTime)){
-                //material.color = initialColor;
-                this.GetComponent<Renderer>().sharedMaterial.EnableKeyword("_EMISSION");
-                this.GetComponent<Renderer>().sharedMaterial.SetColor("_EmissionColor", initialColor);
-                attacking = false;
-                attackTime = 0;
-                nextFireTime = 0;
-            }
-        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -97,7 +64,7 @@ public class PlayerController : MonoBehaviour
             if(!attacking)
             {
                 vidas = vidas - 1;
-                setVidasTexto();
+                healthBar.SetHealthBar(vidas);
                 if (vidas < 1)
                 {
                     FindObjectOfType<GameManager>().GameOver();
@@ -111,11 +78,6 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-    }
-
-    private void setVidasTexto()
-    {
-        texto_vidas.GetComponent<Text>().text = "Vidas: " + vidas.ToString();
     }
 
     void addPoints(int points)
