@@ -6,15 +6,22 @@ public class GenerateVegetation : ScriptableObject
 {
     [Range(0, 300)]
     public int numTrees;
-    private Vector3[] treesPosition;
+    private Vector3[] treesPosition; //Cambiar prox a Tree[] ¿¿?
     private Transform terrainSeed;
     private Transform prefabTree;
     Vector3 planetCenter = Vector3.zero;
+    Mesh[] planetSurface = new Mesh[6];
 
     public GenerateVegetation(Transform tree)
     {
+        MeshFilter[] surfaceMeshFilters = GameObject.Find("Planet").GetComponent<Planet>().meshFilters;
+        for (int i = 0; i < surfaceMeshFilters.Length; i++)
+        {
+            planetSurface[i]=surfaceMeshFilters[i].sharedMesh;
+        }
+
         this.prefabTree = tree;
-        this.numTrees = 2;
+        this.numTrees = 40;
     }
     public void Generate()
     {
@@ -42,73 +49,38 @@ public class GenerateVegetation : ScriptableObject
     private void GenerateTrees()
     {
         int treeCount = 0;
-        
-        //Index of closest tree in trees array
-        int closeTree;
+        Vector3 vertex;
 
         while (treeCount < numTrees)
         {
-            //Generar angulos a,b aleatorios
-            //Futuro --> Generar zonas con especial concentración de árboles.
-            float alfa = Random.Range(0.0f, 2 * Mathf.PI);
-            float beta = Random.Range((-1) * Mathf.PI / 2, Mathf.PI / 2);
+            //Vertice aleatorio en el planet
+            int rdFace = Random.Range(0,6);
+            int vertexCount = planetSurface[rdFace].vertices.Length;
+            int rdVertex = Random.Range(0, vertexCount);
+            vertex = planetSurface[rdFace].vertices[rdVertex];
 
-            //Set new tree position when a,b are given
-            float treeX = Mathf.Cos(beta) * Mathf.Cos(alfa);
-            float treeY = Mathf.Cos(beta) * Mathf.Sin(alfa);
-            float treeZ = Mathf.Sin(beta);
-
-            Vector3 dirTree = new Vector3(treeX, treeY, treeZ);
-
-            //Comprobar que la posición es válida respecto a la posición de los otros árboles.
-            RaycastHit treePos;
-            
-            Debug.DrawLine(planetCenter, dirTree * 100, Color.yellow, 30);
-
-            Ray treeRay = new Ray(planetCenter, dirTree);
-
-            if (Physics.Raycast(treeRay, out treePos))
-            {
-                //Comprobar que no está cerca de los otros árboles
-                bool tooClose = false;
-                if (treeCount > 0)
-                {
-                    for (int i = 0; i < treeCount && !tooClose; i++)
-                    {
-                        if ((treePos.point - treesPosition[i]).magnitude < 3)
-                        {
-                            tooClose = true;
-
-                            /*
-                            if(!treesPosition[i].AlreadyScaled()){
-                                closeTree = i;
-                            }
-                            */
-                        }
-                    }
-                }
-
-                //Si es el primero o no está muy cerca lo podemos generar
-                if (!tooClose)
-                {
-                    treesPosition[treeCount] = treePos.point;
-                    Instantiate(prefabTree, treePos.point, Quaternion.FromToRotation(Vector3.up, dirTree), GameObject.Find("TerrainSeed").GetComponent<Transform>());    
-
-                } else{
-                    /*Hacer árbol cercano más grande
-                    treesPosition[i].Grow();
-                    */
-                    
-                }
+            //Comprobar que no se ha usado ese vértice
+            if(!vertexUsed(vertex, treeCount)){
+                Vector3 dirTree = vertex - planetCenter;
+                Instantiate(prefabTree, vertex, Quaternion.FromToRotation(Vector3.up, dirTree), GameObject.Find("TerrainSeed").GetComponent<Transform>());
+                treesPosition[treeCount] = vertex;
+                treeCount++;
             }
+        }    
+    }
 
-            else
-            {
-                Debug.Log("Returns false");
+    private void GenerateGrass(){
+
+    }
+
+    private bool vertexUsed(Vector3 vertex, int count){
+        bool used = false;
+
+        for(int i = 0; i < count && !used; i++){
+            if(vertex == treesPosition[i]){
+                used = true;
             }
-
-            treeCount++;
-
         }
+        return used;
     }
 }

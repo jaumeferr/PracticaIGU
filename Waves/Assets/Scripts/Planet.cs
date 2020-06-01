@@ -14,7 +14,7 @@ public class Planet : MonoBehaviour
     ShapeGenerator shapeGenerator;
 
     [SerializeField, HideInInspector]
-    MeshFilter[] meshFilters;
+    public MeshFilter[] meshFilters;
     TerrainFace[] terrainFaces;
     public Color planetColor = Color.black;
     EnemySpawner enemySpawner;
@@ -23,7 +23,7 @@ public class Planet : MonoBehaviour
     {
         GeneratePlanet();
     }
-    
+
     void Initialize()
     {
         //InitializeShapeSettings();
@@ -55,7 +55,10 @@ public class Planet : MonoBehaviour
             terrainFaces[i] = new TerrainFace(shapeGenerator, meshFilters[i].sharedMesh, resolution, directions[i]);
 
             meshFilters[i].gameObject.SetActive(true);
-
+            if (!meshFilters[i].GetComponent<MeshCollider>())
+            {
+                meshFilters[i].gameObject.AddComponent<MeshCollider>().convex = true;
+            }
         }
     }
 

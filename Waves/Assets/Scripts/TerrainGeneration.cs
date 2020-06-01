@@ -12,6 +12,8 @@ public class TerrainGeneration : MonoBehaviour
     {
         vegetation = new GenerateVegetation(tree);
         vegetation.Generate();
+        //rocas
+        //edificios
     }
 
 }
