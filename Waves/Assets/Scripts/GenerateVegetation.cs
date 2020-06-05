@@ -2,37 +2,57 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenerateVegetation : ScriptableObject
+public class GenerateVegetation : MonoBehaviour
 {
     [Range(0, 300)]
     public int numTrees;
-    private Vector3[] treesPosition; //Cambiar prox a Tree[] ¿¿?
+    public int numRocks;
+    public int numGrassGroups;
+    private GrassGroup[] grass;
+    private Tree[] trees;
+    private Rock[] rocks;
+
+
+    //INSTANCIAS PREFABS
     private Transform terrainSeed;
-    private Transform prefabTree;
+    public Transform prefabTree_1;
+    public Transform prefabTree_2;
+
+    public Transform prefabRock_1;
+    public Transform prefabRock_2;
+
+    public Transform prefabGrass_1;
+
+    public Transform prefabGrass_2;
+
+
+    //PROPIEDADES PLANETA
     Vector3 planetCenter = Vector3.zero;
     Mesh[] planetSurface = new Mesh[6];
 
-    public GenerateVegetation(Transform tree)
+
+    private void Awake()
     {
         MeshFilter[] surfaceMeshFilters = GameObject.Find("Planet").GetComponent<Planet>().meshFilters;
         for (int i = 0; i < surfaceMeshFilters.Length; i++)
         {
-            planetSurface[i]=surfaceMeshFilters[i].sharedMesh;
+            planetSurface[i] = surfaceMeshFilters[i].sharedMesh;
         }
 
-        this.prefabTree = tree;
-        this.numTrees = 40;
+        this.Generate();
     }
     public void Generate()
     {
-        treesPosition = new Vector3[numTrees];
+        trees = new Tree[numTrees];
+        rocks = new Rock[numRocks];
         Vector3 planetCenter = Vector3.zero;
 
         //Limpiar terreno
         this.CleanTerrain();
 
-        //Generar todos los puntos de posiciamiento de árboles
+        //Generar 
         this.GenerateTrees();
+        this.GenerateRocks();
     }
 
     private void CleanTerrain()
@@ -46,6 +66,7 @@ public class GenerateVegetation : ScriptableObject
         }
     }
 
+    //------------------------------------------------------ GENERATION --------------------------------------------------------------------
     private void GenerateTrees()
     {
         int treeCount = 0;
@@ -54,33 +75,193 @@ public class GenerateVegetation : ScriptableObject
         while (treeCount < numTrees)
         {
             //Vertice aleatorio en el planet
-            int rdFace = Random.Range(0,6);
-            int vertexCount = planetSurface[rdFace].vertices.Length;
-            int rdVertex = Random.Range(0, vertexCount);
-            vertex = planetSurface[rdFace].vertices[rdVertex];
+            vertex = randomVertex();
 
             //Comprobar que no se ha usado ese vértice
-            if(!vertexUsed(vertex, treeCount)){
+            if (!vertexUsedTree(vertex, treeCount))
+            {
+                //Si se acerca a otro árbol, hacer más grande ese árbol
+                for (int i = 0; i < treeCount - 1; i++)
+                {
+                    if (Vector3.Magnitude(vertex - trees[i].obj.GetComponent<Transform>().position) < 7) //AJUSTAR --------------------
+                    {
+                        //Hacer más grande
+                        trees[i].Grow(trees[i].size + 1);
+                        
+                        //Tamaño max?
+                    }
+                }
+                //Generar árbol tipo 1 o 2
                 Vector3 dirTree = vertex - planetCenter;
-                Instantiate(prefabTree, vertex, Quaternion.FromToRotation(Vector3.up, dirTree), GameObject.Find("TerrainSeed").GetComponent<Transform>());
-                treesPosition[treeCount] = vertex;
+                int treeType = Random.Range(1, 3);
+                Transform tree;
+
+                if (treeType == 1)
+                {
+                    tree = Instantiate(prefabTree_1, vertex, Quaternion.FromToRotation(Vector3.up, dirTree), GameObject.Find("TerrainSeed").GetComponent<Transform>());
+                }
+                else
+                {
+                    tree = Instantiate(prefabTree_2, vertex, Quaternion.FromToRotation(Vector3.up, dirTree), GameObject.Find("TerrainSeed").GetComponent<Transform>());
+
+                }
+                trees[treeCount] = new Tree(1, tree);
                 treeCount++;
             }
-        }    
+        }
     }
 
-    private void GenerateGrass(){
+    private void GenerateRocks()
+    {
+        float size = Random.Range(10, 15);
 
+        int rockCount = 0;
+        Vector3 vertex;
+
+        while (rockCount < numRocks)
+        {
+            //Vertice aleatorio en el planet
+            vertex = randomVertex();
+
+            //Comprobar que no se ha usado ese vértice
+            if (!vertexUsedTree(vertex, numTrees) && !vertexUsedRock(vertex, rockCount))
+            {
+                bool grown = false;
+                //Si está cerca de otra roca
+                for (int i = 0; i < rockCount - 1 && !grown; i++)
+                {
+                    if (Vector3.Magnitude(vertex - rocks[i].obj.GetComponent<Transform>().position) < 5)
+                    {
+                        rocks[i].Grow(2);
+                        grown = true;
+                    }
+                }
+
+                //Generar roca tipo 1 o 2
+                Vector3 dirRock = vertex - planetCenter;
+                int rockType = Random.Range(1, 3);
+                Transform rock;
+
+                if (rockType == 1)
+                {
+                    rock = Instantiate(prefabRock_1, vertex, Quaternion.FromToRotation(Vector3.up, dirRock), GameObject.Find("TerrainSeed").GetComponent<Transform>());
+                }
+                else
+                {
+                    rock = Instantiate(prefabRock_2, vertex, Quaternion.FromToRotation(Vector3.up, dirRock), GameObject.Find("TerrainSeed").GetComponent<Transform>());
+
+                }
+                rocks[rockCount] = new Rock(size, rock);
+                rockCount++;
+            }
+        }
     }
 
-    private bool vertexUsed(Vector3 vertex, int count){
+    //------------------------------------------------------ UTILS --------------------------------------------------------------------
+
+    private bool vertexUsedTree(Vector3 vertex, int count)
+    {
         bool used = false;
 
-        for(int i = 0; i < count && !used; i++){
-            if(vertex == treesPosition[i]){
+        for (int i = 0; i < count && !used; i++)
+        {
+            if (vertex == trees[i].obj.GetComponent<Transform>().position)
+            {
                 used = true;
             }
         }
         return used;
+    }
+
+    private bool vertexUsedRock(Vector3 vertex, int count)
+    {
+        bool used = false;
+
+        for (int i = 0; i < count && !used; i++)
+        {
+            if (vertex == rocks[i].obj.GetComponent<Transform>().position)
+            {
+                used = true;
+            }
+        }
+        return used;
+    }
+
+    private Vector3[] createCluster(int maxRadius, Vector3 initialPoint)
+    {
+        Vector3[] cluster = new Vector3[Random.Range(10, 20)];
+
+        return cluster;
+    }
+
+    private Vector3 randomVertex()
+    {
+        int rdFace = Random.Range(0, 6);
+        int vertexCount = planetSurface[rdFace].vertices.Length;
+        int rdVertex = Random.Range(0, vertexCount);
+        return planetSurface[rdFace].vertices[rdVertex];
+    }
+
+
+    //------------------------------------------------------ CLASSES --------------------------------------------------------------------
+    private class GrassGroup
+    {
+        public Vector3 groupCenter;
+        public int radius;
+        public GameObject[] objs;
+
+        public GrassGroup(int size, Vector3 center, Transform[] ts)
+        {
+            this.groupCenter = center;
+            this.radius = size;
+
+            for (int i = 0; i < ts.Length; i++)
+            {
+                objs[i] = ts[i].gameObject;
+            }
+        }
+
+    }
+
+    private class Rock
+    {
+        public float size;
+        public GameObject obj;
+
+        public Rock(float size, Transform t)
+        {
+            this.obj = t.gameObject;
+            Resize(size);
+        }
+
+        public void Resize(float size)
+        {
+            this.size = size;
+            obj.GetComponent<Transform>().localScale = new Vector3(size, size * 2, size);
+        }
+
+        public void Grow(float size)
+        {
+            this.size = this.size + size;
+            obj.GetComponent<Transform>().localScale = new Vector3(obj.GetComponent<Transform>().localScale.x + size, obj.GetComponent<Transform>().localScale.y + size * 2, obj.GetComponent<Transform>().localScale.z + size);
+        }
+    }
+
+    private class Tree
+    {
+        public float size;
+        public GameObject obj;
+
+        public Tree(float size, Transform t)
+        {
+            this.size = size;
+            this.obj = t.gameObject;
+        }
+
+        public void Grow(float size)
+        {
+            this.size = size;
+            obj.GetComponent<Transform>().localScale = new Vector3(size, size, size);
+        }
     }
 }
