@@ -15,7 +15,7 @@ public class Planet : MonoBehaviour
 
     [SerializeField, HideInInspector]
     public MeshFilter[] meshFilters;
-    TerrainFace[] terrainFaces;
+    public TerrainFace[] terrainFaces;
     public Color planetColor = Color.black;
     EnemySpawner enemySpawner;
 

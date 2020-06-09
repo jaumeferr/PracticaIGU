@@ -8,7 +8,7 @@ public class GenerateVegetation : MonoBehaviour
     public int numTrees;
     public int numRocks;
     public int numGrassGroups;
-    private GrassGroup[] grass;
+    private Grass grass;
     private Tree[] trees;
     private Rock[] rocks;
 
@@ -53,6 +53,7 @@ public class GenerateVegetation : MonoBehaviour
         //Generar 
         this.GenerateTrees();
         this.GenerateRocks();
+        this.GenerateGrass();
     }
 
     private void CleanTerrain()
@@ -87,7 +88,7 @@ public class GenerateVegetation : MonoBehaviour
                     {
                         //Hacer más grande
                         trees[i].Grow(trees[i].size + 1);
-                        
+
                         //Tamaño max?
                     }
                 }
@@ -157,6 +158,40 @@ public class GenerateVegetation : MonoBehaviour
         }
     }
 
+    private void GenerateGrass()
+    {
+        this.grass = new Grass(0.2f);
+
+        foreach (TerrainFace tf in GameObject.Find("Planet").GetComponent<Planet>().terrainFaces)
+        {
+            for (int y = 0; y < tf.resolution; y++)
+            {
+                for (int x = 0; x < tf.resolution; x++)
+                {
+                    int i = x + y * tf.resolution;
+                    Vector3 vertex = tf.mesh.vertices[i];
+                    float prob = grass.CalculateGrassProb(vertex);
+
+                    Vector3 dirGrass = (vertex - planetCenter).normalized;
+
+                    if (prob > this.grass.minGrassValue)
+                    {
+                        //Instanciar yerba buena
+                        int grassType = Random.Range(1, 3);
+
+                        if (grassType == 1)
+                        {
+                            Instantiate(prefabGrass_1, vertex, Quaternion.FromToRotation(Vector3.up, dirGrass), GameObject.Find("TerrainSeed").GetComponent<Transform>());
+                        }
+                        else
+                        {
+                            Instantiate(prefabGrass_2, vertex, Quaternion.FromToRotation(Vector3.up, dirGrass), GameObject.Find("TerrainSeed").GetComponent<Transform>());
+                        }
+                    }
+                }
+            }
+        }
+    }
     //------------------------------------------------------ UTILS --------------------------------------------------------------------
 
     private bool vertexUsedTree(Vector3 vertex, int count)
@@ -204,13 +239,16 @@ public class GenerateVegetation : MonoBehaviour
 
 
     //------------------------------------------------------ CLASSES --------------------------------------------------------------------
-    private class GrassGroup
+    private class Grass
     {
         public Vector3 groupCenter;
         public int radius;
         public GameObject[] objs;
+        public ShapeSettings grassShapeSettings;
+        public NoiseFilter grassNoiseFilter;
+        public float minGrassValue;
 
-        public GrassGroup(int size, Vector3 center, Transform[] ts)
+        public Grass(int size, Vector3 center, Transform[] ts)
         {
             this.groupCenter = center;
             this.radius = size;
@@ -219,6 +257,22 @@ public class GenerateVegetation : MonoBehaviour
             {
                 objs[i] = ts[i].gameObject;
             }
+        }
+
+        public Grass(float minGrassValue)
+        {
+            ShapeSettings grassShapeSettings = new ShapeSettings(GameObject.Find("Planet").GetComponent<Planet>().planetRadius);
+            grassShapeSettings.InitializeNoiseLayer();
+            this.grassNoiseFilter = new NoiseFilter(grassShapeSettings.noiseLayer.noiseSettings);
+            this.minGrassValue = minGrassValue;
+        }
+
+        public float CalculateGrassProb(Vector3 point)
+        {
+
+            float prob = grassNoiseFilter.Evaluate(point);
+
+            return prob;
         }
 
     }

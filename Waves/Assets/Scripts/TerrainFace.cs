@@ -5,8 +5,8 @@ using UnityEngine;
 public class TerrainFace
 {
     ShapeGenerator shapeGenerator;
-    Mesh mesh;
-    int resolution;
+    public Mesh mesh;
+    public int resolution;
     Vector3 localUp;
     Vector3 axisA;
     Vector3 AxisB;
@@ -45,7 +45,7 @@ public class TerrainFace
 
                     triangles[triIndex+3] = i;
                     triangles[triIndex+4] = i + 1;
-                    triangles[triIndex+5] = i + resolution + +1;
+                    triangles[triIndex+5] = i + resolution + 1;
 
                     triIndex += 6;
                 }
