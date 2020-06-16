@@ -18,13 +18,27 @@ public class ShapeSettings : ScriptableObject
     {
         //Initialize NoiseLayer 1
         NoiseSettings noiseSettings = new NoiseSettings(
-            (float)Random.Range(0.15f, 0.25f),
-            2,
-            (float)Random.Range(0.5f, 0.6f),
-            (float)Random.Range(3.3f, 3.7f),
-            (float)Random.Range(0.2f, 0.3f),
-            Vector3.zero,
-            0);
+            (float)Random.Range(0.15f, 0.25f),  //Strength
+            2,                                  //numLayers
+            (float)Random.Range(0.5f, 0.6f),    //BaseRoughness
+            (float)Random.Range(3.3f, 3.7f),    //Roughness
+            (float)Random.Range(0.2f, 0.3f),    //Persistance
+            Vector3.zero,                       //Centre    
+            0);                                 //minValue
+
+        noiseLayer = new NoiseLayer(noiseSettings);
+    }
+
+    public void InitializeVegetationNoiseLayer(){
+        //Initialize NoiseLayer 1
+        NoiseSettings noiseSettings = new NoiseSettings(
+            (float)Random.Range(0.15f, 0.25f),  //Strength
+            2,                                  //numLayers
+            (float)Random.Range(0.5f, 0.6f),    //BaseRoughness
+            (float)Random.Range(3.3f, 3.7f),    //Roughness
+            (float)Random.Range(0.2f, 0.3f),    //Persistance
+            Vector3.zero,                       //Centre    
+            0);                                 //minValue
 
         noiseLayer = new NoiseLayer(noiseSettings);
     }

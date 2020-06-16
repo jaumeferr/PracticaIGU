@@ -19,11 +19,6 @@ public class Planet : MonoBehaviour
     public Color planetColor = Color.black;
     EnemySpawner enemySpawner;
 
-    private void OnValidate()
-    {
-        GeneratePlanet();
-    }
-
     void Initialize()
     {
         //InitializeShapeSettings();

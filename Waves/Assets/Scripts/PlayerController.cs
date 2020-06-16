@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     Vector3 moveAmount;
     public float turn;
     Vector3 smoothMoveSpeed;
-    
+
     Rigidbody rb;
     Transform tf;
 
@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
 
     public HealthBar healthBar;
     public int vidas;
+    public int bajas = 0;
     public int muertos;
 
     // Start is called before the first frame update
@@ -54,14 +55,14 @@ public class PlayerController : MonoBehaviour
 
         //Move and face movement direction
         rb.MovePosition(rb.position + tf.TransformDirection(moveAmount) * Time.fixedDeltaTime);
-        tf.Rotate(0,moveHorizontal,0);
+        tf.Rotate(0, moveHorizontal, 0);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Enemy")
         {
-            if(!attacking)
+            if (!attacking)
             {
                 vidas = vidas - 1;
                 healthBar.SetHealthBar(vidas);
@@ -69,12 +70,25 @@ public class PlayerController : MonoBehaviour
                 {
                     FindObjectOfType<GameManager>().GameOver();
                 }
-            } else 
+            }
+            else
             {
+                //Controlar victoria
                 muertos = muertos - 1;
                 if (muertos == 0)
                 {
                     FindObjectOfType<GameManager>().Victory();
+                }
+
+                //Control nueva oleada en el nivel 2
+                if (SceneManager.GetActiveScene().name == "Level_02")
+                {
+                    bajas++;
+                    if (GameObject.Find("Planet").GetComponent<EnemySpawner>().enemiesPerWave % bajas == 0
+                    && GameObject.Find("Planet").GetComponent<EnemySpawner>().currentWave != GameObject.Find("Planet").GetComponent<EnemySpawner>().waves)
+                    {
+                        GameObject.Find("Planet").GetComponent<EnemySpawner>().SpawnEnemies();
+                    }
                 }
             }
         }

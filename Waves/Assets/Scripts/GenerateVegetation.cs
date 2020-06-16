@@ -30,8 +30,7 @@ public class GenerateVegetation : MonoBehaviour
     Vector3 planetCenter = Vector3.zero;
     Mesh[] planetSurface = new Mesh[6];
 
-
-    private void Awake()
+    public void Generate()
     {
         MeshFilter[] surfaceMeshFilters = GameObject.Find("Planet").GetComponent<Planet>().meshFilters;
         for (int i = 0; i < surfaceMeshFilters.Length; i++)
@@ -39,10 +38,6 @@ public class GenerateVegetation : MonoBehaviour
             planetSurface[i] = surfaceMeshFilters[i].sharedMesh;
         }
 
-        this.Generate();
-    }
-    public void Generate()
-    {
         trees = new Tree[numTrees];
         rocks = new Rock[numRocks];
         Vector3 planetCenter = Vector3.zero;

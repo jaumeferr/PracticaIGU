@@ -13,6 +13,7 @@ public class EnemyController : MonoBehaviour
     Transform tf;
     float speed = 0.1f;
     Vector3 planetCenter = new Vector3(0.0f, 0.0f, 0.0f);
+    public bool paper = false;
     
     // Start is called before the first frame update
     void Start()
@@ -47,9 +48,18 @@ public class EnemyController : MonoBehaviour
             
             // Si el player no tiene la habilidad activada, le quitamos vida
             if (player.GetComponent<PlayerController>().attacking){
+                if(paper == true){
+                    DropPaper();
+                }
                 Destroy(this.gameObject);
             }
         }
+    }
+
+    private void DropPaper(){
+        //Crear instancia del papel sobre el enemigo
+
+        //Aplicar fuerza para hacerlo volar en una dirección aleatoria.
     }
 
 }
