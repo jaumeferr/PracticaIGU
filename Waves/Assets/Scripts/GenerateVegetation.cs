@@ -48,7 +48,7 @@ public class GenerateVegetation : MonoBehaviour
         //Generar 
         this.GenerateTrees();
         this.GenerateRocks();
-        this.GenerateGrass();
+        //this.GenerateGrass();
     }
 
     private void CleanTerrain()

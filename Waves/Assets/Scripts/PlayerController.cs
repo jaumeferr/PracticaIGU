@@ -73,23 +73,36 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                //Controlar victoria
-                muertos = muertos - 1;
+                //LEVEL_01
+                if (SceneManager.GetActiveScene().name == "Level_01"){
+                    muertos = muertos - 1;
                 if (muertos == 0)
                 {
                     FindObjectOfType<GameManager>().Victory();
                 }
+                }
 
-                //Control nueva oleada en el nivel 2
+                //LEVEL_02
                 if (SceneManager.GetActiveScene().name == "Level_02")
                 {
                     bajas++;
-                    if (GameObject.Find("Planet").GetComponent<EnemySpawner>().enemiesPerWave % bajas == 0
+                    Debug.Log("Kills: " + bajas);
+                    
+                    if (GameObject.Find("Planet").GetComponent<EnemySpawner>().enemiesPerWave / bajas == 1
                     && GameObject.Find("Planet").GetComponent<EnemySpawner>().currentWave != GameObject.Find("Planet").GetComponent<EnemySpawner>().waves)
                     {
+                        Debug.Log("Bajas: " + bajas + " .... Se acercan nuevos enemigos");
                         GameObject.Find("Planet").GetComponent<EnemySpawner>().SpawnEnemies();
+
+                    //Ultima oleada dropear papel
+                    }  
+                    
+                    if(other.gameObject.GetComponent<EnemyController>().paper){
+                        other.gameObject.GetComponent<EnemyController>().DropPaper();
                     }
                 }
+
+                Destroy(other.gameObject);
             }
         }
     }

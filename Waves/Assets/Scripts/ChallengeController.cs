@@ -50,6 +50,10 @@ public class ChallengeController : MonoBehaviour
         //Spawn enemies
         GameObject.Find("Planet").GetComponent<EnemySpawner>().SpawnEnemies();
 
+        Debug.Log("Oleadas: " + GameObject.Find("Planet").GetComponent<EnemySpawner>().waves + "\n" + 
+                   "Enemigos por oleada: " + GameObject.Find("Planet").GetComponent<EnemySpawner>().enemiesPerWave + "\n" + 
+                   "Cantidad de enemigos: " + GameObject.FindGameObjectsWithTag("Enemy").Length);
+
     }
 
 }

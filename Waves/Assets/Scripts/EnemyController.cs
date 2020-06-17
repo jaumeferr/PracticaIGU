@@ -40,25 +40,9 @@ public class EnemyController : MonoBehaviour
         tf.position = tf.position + (dir * speed);
     }
 
-    // Ataque enemigo
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            
-            // Si el player no tiene la habilidad activada, le quitamos vida
-            if (player.GetComponent<PlayerController>().attacking){
-                if(paper == true){
-                    DropPaper();
-                }
-                Destroy(this.gameObject);
-            }
-        }
-    }
-
-    private void DropPaper(){
+    public void DropPaper(){
         //Crear instancia del papel sobre el enemigo
-
+        Debug.Log("Dropping mf paper");
         //Aplicar fuerza para hacerlo volar en una dirección aleatoria.
     }
 
