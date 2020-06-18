@@ -9,6 +9,8 @@ TagManager:
   - PlanetFace
   - Terrain
   - Item
+  - SkyboxCamera
+  - Score
   layers:
   - Default
   - TransparentFX

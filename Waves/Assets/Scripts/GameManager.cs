@@ -18,23 +18,45 @@ public class GameManager : MonoBehaviour
     // Al salir de la partida nos llevará al menu principal
     public void QuitGame()
     {
+        Application.Quit();
+    }
+
+    public void GoToMenu()
+    {
         SceneManager.LoadScene("Menu");
     }
 
     public void Victory()
     {
+        //Save score
+        Variables.scores[Variables.currentLevel-1] = GameObject.Find("Player").GetComponent<PlayerController>().score;
         SceneManager.LoadScene("Victoria");
+        
     }
 
     public void NextLvl()
     {
         Time.timeScale = 1f;
+        Variables.currentLevel = 1;
+        Variables.nextLevel = 2;
         SceneManager.LoadScene("Level_01");
     }
 
     public void NextLv2()
     {
         Time.timeScale = 1f;
+        Variables.currentLevel = 2;
+        Variables.nextLevel = 3;
         SceneManager.LoadScene("Level_02");
+    }
+
+    public void GoToNextLv(){
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Level_0" + Variables.nextLevel);
+    }
+
+    public void Restart(){
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Level_0" + Variables.currentLevel);
     }
 }

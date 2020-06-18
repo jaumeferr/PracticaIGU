@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class MenuController : MonoBehaviour
 {
@@ -22,6 +24,11 @@ public class MenuController : MonoBehaviour
 
     public void OpenSettingsPanel(){
         SettingsPanel.SetActive(true);
+    }
+
+    public void SetScore(int level, int score){
+        GameObject[] scores = GameObject.FindGameObjectsWithTag("Scores");
+        scores[level-1].GetComponent<Text>().text = score.ToString();
     }
 
 }
