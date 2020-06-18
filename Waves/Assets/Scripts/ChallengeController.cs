@@ -34,7 +34,7 @@ public class ChallengeController : MonoBehaviour
     }
 
     void Update(){
-         UpdateTimerUI();
+        UpdateTimerUI();
      }
 
  //call this on update
@@ -90,7 +90,7 @@ public class ChallengeController : MonoBehaviour
         }
 
         //Generate Enemies
-        GameObject.Find("Planet").GetComponent<EnemySpawner>().InitializeSpawnConfig(3, 15);
+        GameObject.Find("Planet").GetComponent<EnemySpawner>().InitializeSpawnConfig(5, 15);
 
         //Spawn enemies
         GameObject.Find("Planet").GetComponent<EnemySpawner>().SpawnEnemies();

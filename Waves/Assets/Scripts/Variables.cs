@@ -9,4 +9,9 @@ public static class Variables
     public static int nextLevel = 2;
     public static bool[] unlockedLevels = new bool[numLevels];
     public static int[] scores = new int[numLevels];
+
+    //level 2
+    public static bool playerHasPaper = false;
+
+
 }
