@@ -2,8 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 public class ChallengeController : MonoBehaviour
 {
+     public UnityEngine.UI.Text timerText;
+     private float secondsCount;
+     private int minuteCount;
+     private int hourCount;
+    
     public void Start()
     {
         string level_name = SceneManager.GetActiveScene().name;
@@ -20,7 +26,27 @@ public class ChallengeController : MonoBehaviour
 
 
         }
+
+        secondsCount = 0;
+        minuteCount = 0;
+        hourCount = 0;
+
     }
+
+    void Update(){
+         UpdateTimerUI();
+     }
+
+ //call this on update
+     public void UpdateTimerUI(){
+         //set timer UI
+         secondsCount += Time.deltaTime;
+         timerText.text =  minuteCount +"' "+ (float)(Math.Truncate((double)secondsCount * 100.0) / 100.0) + "''";
+         if(secondsCount >= 60){
+             minuteCount++;
+             secondsCount = 0;
+         }  
+     }
 
     public void Initialize_Level_01()
     {
