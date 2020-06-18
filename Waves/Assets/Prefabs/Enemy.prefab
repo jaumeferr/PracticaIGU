@@ -137,8 +137,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1a7b87a639b50c4394962c6b2a30429, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vidas: 3
-  muertos: 10
+  paper: 0
+  paperT: {fileID: 7415273526459659969, guid: 675ee027266492740871dbd31f76df25, type: 3}
 --- !u!65 &306730355477927710
 BoxCollider:
   m_ObjectHideFlags: 0

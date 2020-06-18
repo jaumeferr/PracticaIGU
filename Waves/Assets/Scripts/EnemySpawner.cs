@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawner: MonoBehaviour
+public class EnemySpawner : MonoBehaviour
 {
     public Transform prefabEnemy;
     private GameObject planet;
@@ -58,5 +58,12 @@ public class EnemySpawner: MonoBehaviour
         }
 
         currentWave++;
+
+        //Level_02
+        if (currentWave == waves)
+        {
+            int rd_enemy = Random.Range(0, enemiesPerWave);
+            currentWaveEnemies[rd_enemy].GetComponent<EnemyController>().paper = true;
+        }
     }
 }

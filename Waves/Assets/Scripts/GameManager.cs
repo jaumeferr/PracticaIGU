@@ -5,13 +5,6 @@ public class GameManager : MonoBehaviour
 {
     bool gameOver = false;
 
-    // Empezar la partida
-    public void StartGame()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("SampleScene"); //DUMBASS NAME para Level01   
-    }
-
     // Pantalla al morir
     public void GameOver()
     {
@@ -35,9 +28,13 @@ public class GameManager : MonoBehaviour
 
     public void NextLvl()
     {
-        //Miramos la escena en la que estamos y si estamos en la primera que nos
-        //mande a la segunda
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Level_01");
+    }
 
-        SceneManager.LoadScene("SampleScene");
+    public void NextLv2()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Level_02");
     }
 }

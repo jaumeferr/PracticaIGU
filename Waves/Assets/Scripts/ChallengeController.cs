@@ -11,6 +11,7 @@ public class ChallengeController : MonoBehaviour
         switch (level_name)
         {
             case "Level_01":
+                Initialize_Level_01();
                 break;
 
             case "Level_02":
@@ -29,6 +30,15 @@ public class ChallengeController : MonoBehaviour
         //Generate Vegetation
         GameObject.Find("TerrainSeed").GetComponent<GenerateVegetation>().Generate();
 
+        //Clear Scene
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        if(enemies != null){
+            foreach (GameObject enemy in enemies)
+            {
+                Destroy(enemy);
+            }
+        }
+
         //Generate Enemies
         GameObject.Find("Planet").GetComponent<EnemySpawner>().InitializeSpawnConfig(1, 40);
 
@@ -44,14 +54,23 @@ public class ChallengeController : MonoBehaviour
         //Generate Vegetation
         GameObject.Find("TerrainSeed").GetComponent<GenerateVegetation>().Generate();
 
+        //Clear Scene
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        if(enemies != null){
+            foreach (GameObject enemy in enemies)
+            {
+                Destroy(enemy);
+            }
+        }
+
         //Generate Enemies
         GameObject.Find("Planet").GetComponent<EnemySpawner>().InitializeSpawnConfig(3, 15);
 
         //Spawn enemies
         GameObject.Find("Planet").GetComponent<EnemySpawner>().SpawnEnemies();
 
-        Debug.Log("Oleadas: " + GameObject.Find("Planet").GetComponent<EnemySpawner>().waves + "\n" + 
-                   "Enemigos por oleada: " + GameObject.Find("Planet").GetComponent<EnemySpawner>().enemiesPerWave + "\n" + 
+        Debug.Log("Oleadas: " + GameObject.Find("Planet").GetComponent<EnemySpawner>().waves + "\n" +
+                   "Enemigos por oleada: " + GameObject.Find("Planet").GetComponent<EnemySpawner>().enemiesPerWave + "\n" +
                    "Cantidad de enemigos: " + GameObject.FindGameObjectsWithTag("Enemy").Length);
 
     }

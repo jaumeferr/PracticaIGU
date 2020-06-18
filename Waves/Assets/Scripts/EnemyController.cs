@@ -14,12 +14,13 @@ public class EnemyController : MonoBehaviour
     float speed = 0.1f;
     Vector3 planetCenter = new Vector3(0.0f, 0.0f, 0.0f);
     public bool paper = false;
-    
+    public Transform paperT;
+
     // Start is called before the first frame update
     void Start()
     {
-        
-        rb = this.GetComponent<Rigidbody>(); 
+
+        rb = this.GetComponent<Rigidbody>();
         tf = this.GetComponent<Transform>();
     }
 
@@ -28,7 +29,7 @@ public class EnemyController : MonoBehaviour
         player = GameObject.Find("Player").GetComponent<Rigidbody>();
 
         //ENEMY MOVEMENT
-            //A --> Vector de C al enemigo, B --> Vector de C al jugador
+        //A --> Vector de C al enemigo, B --> Vector de C al jugador
         Vector3 v = Vector3.Cross(rb.position - planetCenter, player.position - planetCenter).normalized;
         Vector3 dir = Vector3.Cross(v, rb.position - planetCenter).normalized;
 
@@ -40,10 +41,18 @@ public class EnemyController : MonoBehaviour
         tf.position = tf.position + (dir * speed);
     }
 
-    public void DropPaper(){
+    public void DropPaper()
+    {
         //Crear instancia del papel sobre el enemigo
         Debug.Log("Dropping mf paper");
+
+        Transform paper_dropped = Instantiate(paperT, tf.position, tf.rotation);
+
         //Aplicar fuerza para hacerlo volar en una dirección aleatoria.
+        Vector2 force_dir = (tf.position - planetCenter).normalized;
+        float force_val = 3;
+        paper_dropped.gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, tf.localEulerAngles.y,0) * force_val, ForceMode.Acceleration);
+
     }
 
 }

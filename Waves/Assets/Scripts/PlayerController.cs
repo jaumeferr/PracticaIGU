@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
     public int vidas;
     public int bajas = 0;
     public int muertos;
+    public GameObject pickMessage;
+    public float maxPickDistance = 4.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -56,6 +58,34 @@ public class PlayerController : MonoBehaviour
         //Move and face movement direction
         rb.MovePosition(rb.position + tf.TransformDirection(moveAmount) * Time.fixedDeltaTime);
         tf.Rotate(0, moveHorizontal, 0);
+
+        //Level_02 victory
+        if (SceneManager.GetActiveScene().name == "Level_02")
+        {
+            GameObject item = GameObject.FindGameObjectWithTag("Item");
+            if (item != null)
+            {
+                Vector3 paper_pos = item.GetComponent<Rigidbody>().position;
+                float dist = Vector3.Magnitude(paper_pos - rb.position);
+                Debug.Log("Distancia: " + dist);
+
+                if (dist < maxPickDistance)
+                {
+                    //Show pick drop message
+                    pickMessage.SetActive(true);
+
+                    if (Input.GetKeyDown(KeyCode.Q))
+                    {
+                        FindObjectOfType<GameManager>().Victory();
+                    }
+
+                }
+                else
+                {
+                    pickMessage.SetActive(false);
+                }
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -74,12 +104,13 @@ public class PlayerController : MonoBehaviour
             else
             {
                 //LEVEL_01
-                if (SceneManager.GetActiveScene().name == "Level_01"){
-                    muertos = muertos - 1;
-                if (muertos == 0)
+                if (SceneManager.GetActiveScene().name == "Level_01")
                 {
-                    FindObjectOfType<GameManager>().Victory();
-                }
+                    muertos = muertos - 1;
+                    if (muertos == 0)
+                    {
+                        FindObjectOfType<GameManager>().Victory();
+                    }
                 }
 
                 //LEVEL_02
@@ -87,17 +118,19 @@ public class PlayerController : MonoBehaviour
                 {
                     bajas++;
                     Debug.Log("Kills: " + bajas);
-                    
-                    if (GameObject.Find("Planet").GetComponent<EnemySpawner>().enemiesPerWave / bajas == 1
+
+                    if (bajas % GameObject.Find("Planet").GetComponent<EnemySpawner>().enemiesPerWave == 0
+                    //if (GameObject.Find("Planet").GetComponent<EnemySpawner>().enemiesPerWave / bajas == 1
                     && GameObject.Find("Planet").GetComponent<EnemySpawner>().currentWave != GameObject.Find("Planet").GetComponent<EnemySpawner>().waves)
                     {
                         Debug.Log("Bajas: " + bajas + " .... Se acercan nuevos enemigos");
                         GameObject.Find("Planet").GetComponent<EnemySpawner>().SpawnEnemies();
 
-                    //Ultima oleada dropear papel
-                    }  
-                    
-                    if(other.gameObject.GetComponent<EnemyController>().paper){
+                        //Ultima oleada dropear papel
+                    }
+
+                    if (other.gameObject.GetComponent<EnemyController>().paper)
+                    {
                         other.gameObject.GetComponent<EnemyController>().DropPaper();
                     }
                 }
