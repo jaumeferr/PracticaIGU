@@ -60,7 +60,7 @@ public class EnemySpawner : MonoBehaviour
         currentWave++;
 
         //Level_02
-        if (currentWave == waves)
+        if (currentWave == waves-1)
         {
             int rd_enemy = Random.Range(0, enemiesPerWave);
             currentWaveEnemies[rd_enemy].GetComponent<EnemyController>().paper = true;

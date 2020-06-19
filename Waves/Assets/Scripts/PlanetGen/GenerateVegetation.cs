@@ -224,7 +224,7 @@ public class GenerateVegetation : MonoBehaviour
         return cluster;
     }
 
-    private Vector3 randomVertex()
+    public Vector3 randomVertex()
     {
         int rdFace = Random.Range(0, 6);
         int vertexCount = planetSurface[rdFace].vertices.Length;

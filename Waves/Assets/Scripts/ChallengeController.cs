@@ -5,11 +5,13 @@ using UnityEngine.SceneManagement;
 using System;
 public class ChallengeController : MonoBehaviour
 {
-     public UnityEngine.UI.Text timerText;
-     private float secondsCount;
-     private int minuteCount;
-     private int hourCount;
-    
+    public UnityEngine.UI.Text timerText;
+    private float secondsCount;
+    private int minuteCount;
+    private int hourCount;
+
+    public Transform NPC;
+
     public void Start()
     {
         string level_name = SceneManager.GetActiveScene().name;
@@ -33,20 +35,23 @@ public class ChallengeController : MonoBehaviour
 
     }
 
-    void Update(){
+    void Update()
+    {
         UpdateTimerUI();
-     }
+    }
 
- //call this on update
-     public void UpdateTimerUI(){
-         //set timer UI
-         secondsCount += Time.deltaTime;
-         timerText.text =  minuteCount +"' "+ (float)(Math.Truncate((double)secondsCount * 100.0) / 100.0) + "''";
-         if(secondsCount >= 60){
-             minuteCount++;
-             secondsCount = 0;
-         }  
-     }
+    //call this on update
+    public void UpdateTimerUI()
+    {
+        //set timer UI
+        secondsCount += Time.deltaTime;
+        timerText.text = minuteCount + "' " + (float)(Math.Truncate((double)secondsCount * 100.0) / 100.0) + "''";
+        if (secondsCount >= 60)
+        {
+            minuteCount++;
+            secondsCount = 0;
+        }
+    }
 
     public void Initialize_Level_01()
     {
@@ -58,7 +63,8 @@ public class ChallengeController : MonoBehaviour
 
         //Clear Scene
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        if(enemies != null){
+        if (enemies != null)
+        {
             foreach (GameObject enemy in enemies)
             {
                 Destroy(enemy);
@@ -80,20 +86,24 @@ public class ChallengeController : MonoBehaviour
         //Generate Vegetation
         GameObject.Find("TerrainSeed").GetComponent<GenerateVegetation>().Generate();
 
+        //Locate NPC
+        this.SpawnNPC();
+
         //Clear Scene
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        if(enemies != null){
+        if (enemies != null)
+        {
             foreach (GameObject enemy in enemies)
             {
                 Destroy(enemy);
             }
         }
 
-        //Generate Enemies
-        GameObject.Find("Planet").GetComponent<EnemySpawner>().InitializeSpawnConfig(5, 15);
+        //Initialize Spawner
+        GameObject.Find("Planet").GetComponent<EnemySpawner>().InitializeSpawnConfig(2, 2); // waves, enemiesPerWave, waiting time
 
-        //Spawn enemies
-        GameObject.Find("Planet").GetComponent<EnemySpawner>().SpawnEnemies();
+        //Esperar 10s antes de spawnear enemigos
+        Invoke("DelayedSpawn", 10.0f);
 
         Debug.Log("Oleadas: " + GameObject.Find("Planet").GetComponent<EnemySpawner>().waves + "\n" +
                    "Enemigos por oleada: " + GameObject.Find("Planet").GetComponent<EnemySpawner>().enemiesPerWave + "\n" +
@@ -101,4 +111,13 @@ public class ChallengeController : MonoBehaviour
 
     }
 
+    public void DelayedSpawn()
+    {
+        GameObject.Find("Planet").GetComponent<EnemySpawner>().SpawnEnemies();
+    }
+
+    public void SpawnNPC(){
+        Vector3 spawnPos = GameObject.Find("TerrainSeed").GetComponent<GenerateVegetation>().randomVertex();
+        Instantiate(NPC, spawnPos + 1 * (spawnPos - Vector3.zero).normalized,Quaternion.FromToRotation(Vector3.up, (spawnPos-Vector3.zero)));
+    }
 }

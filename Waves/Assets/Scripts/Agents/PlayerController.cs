@@ -16,9 +16,9 @@ public class PlayerController : MonoBehaviour
     Transform tf;
     public bool attacking;
     public SkillBarController skillBar;
-
     public HealthBar healthBar;
     public int vidas;
+    public float damageDelay;
     public int bajas = 0;
     public int muertos;
     public GameObject pickMessage;
@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
         attacking = false;
         skillBar.SetAttackBar();
         healthBar.SetMaxHealth(vidas);
+        damageDelay = Variables.maxDamageDelay;
     }
 
     // Update is called once per frame
@@ -75,13 +76,10 @@ public class PlayerController : MonoBehaviour
                     pickMessage.SetActive(false);
                 }
             }
-            
+
             if (Variables.playerHasPaper)
             {
-                //Show paper icon
-                
-
-                if ((Vector3.Magnitude(GameObject.Find("Friend").GetComponent<Rigidbody>().position - rb.position) < maxActionDist))
+                if ((Vector3.Magnitude(GameObject.FindGameObjectWithTag("NPC").GetComponent<Rigidbody>().position - rb.position) < maxActionDist))
                 {
                     //Show pick drop message
                     pickMessage.SetActive(true);
@@ -89,6 +87,10 @@ public class PlayerController : MonoBehaviour
                     {
                         FindObjectOfType<GameManager>().Victory();
                     }
+                }
+                else
+                {
+                    pickMessage.SetActive(false);
                 }
             }
         }
@@ -100,6 +102,26 @@ public class PlayerController : MonoBehaviour
         {
             if (!attacking)
             {
+                if (this.damageDelay == Variables.maxDamageDelay)
+                {
+                    healthBar.SetHealthBar(vidas);
+                    if (vidas < 1)
+                    {
+                        FindObjectOfType<GameManager>().GameOver();
+                    }
+                    this.damageDelay -= Time.deltaTime;
+                }
+
+                if (this.damageDelay <= 0)
+                {
+                    this.damageDelay = Variables.maxDamageDelay;
+                }
+
+                if ((this.damageDelay > 0) && (this.damageDelay < Variables.maxDamageDelay))
+                {
+                    this.damageDelay -= Time.deltaTime;
+                }
+
                 vidas = vidas - 1;
                 healthBar.SetHealthBar(vidas);
                 if (vidas < 1)

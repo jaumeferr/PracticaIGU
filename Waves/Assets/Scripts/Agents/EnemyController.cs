@@ -16,29 +16,41 @@ public class EnemyController : MonoBehaviour
     public bool paper = false;
     public Transform paperT;
 
+    //Level 2
+    public Rigidbody friend;
+
     // Start is called before the first frame update
     void Start()
     {
 
         rb = this.GetComponent<Rigidbody>();
         tf = this.GetComponent<Transform>();
+        player = GameObject.Find("Player").GetComponent<Rigidbody>();
+
+        //Level 2
+        GameObject friendObj = GameObject.FindGameObjectWithTag("NPC");
+        if(friendObj != null){
+            friend = friendObj.GetComponent<Rigidbody>();
+        }
     }
 
     void FixedUpdate()
     {
-        player = GameObject.Find("Player").GetComponent<Rigidbody>();
+        if(friend != null){
+            //Level 2
+            float FriendDist = Vector3.Magnitude(rb.position - friend.position);
+            float playerDist = Vector3.Magnitude(rb.position - player.position);
 
-        //ENEMY MOVEMENT
-        //A --> Vector de C al enemigo, B --> Vector de C al jugador
-        Vector3 v = Vector3.Cross(rb.position - planetCenter, player.position - planetCenter).normalized;
-        Vector3 dir = Vector3.Cross(v, rb.position - planetCenter).normalized;
-
-        //Mirar hacia el objetivo
-        Quaternion rotation = Quaternion.LookRotation((tf.position + dir * speed) - tf.position, Vector3.up);
-        tf.rotation = rotation;
-
-        //Ir hacia el objetivo
-        tf.position = tf.position + (dir * speed);
+            if(playerDist <= FriendDist){
+                Follow(player);
+            }
+            else{
+                Follow(friend);
+            }
+        } 
+        else{
+            Follow(player);
+        }
     }
 
     public void DropPaper()
@@ -55,4 +67,17 @@ public class EnemyController : MonoBehaviour
 
     }
 
+    public void Follow(Rigidbody followed){
+        //ENEMY MOVEMENT
+        //A --> Vector de C al enemigo, B --> Vector de C al jugador
+        Vector3 v = Vector3.Cross(rb.position - planetCenter, followed.position - planetCenter).normalized;
+        Vector3 dir = Vector3.Cross(v, rb.position - planetCenter).normalized;
+
+        //Mirar hacia el objetivo
+        Quaternion rotation = Quaternion.LookRotation((tf.position + dir * speed) - tf.position, Vector3.up);
+        tf.rotation = rotation;
+
+        //Ir hacia el objetivo
+        tf.position = tf.position + (dir * speed);
+    }
 }
