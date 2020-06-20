@@ -18,7 +18,7 @@ public class EnemySpawner : MonoBehaviour
     public void InitializeSpawnConfig(int waves, int enemiesPerWave)
     {
         this.planet = GameObject.Find("Planet");
-        this.player = GameObject.Find("Player");
+        this.player = GameObject.FindGameObjectWithTag("Player");
 
         this.planetCenter = planet.GetComponent<Transform>().position;
         this.radius = 41.0f;

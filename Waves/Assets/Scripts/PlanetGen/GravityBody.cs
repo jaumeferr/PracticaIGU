@@ -14,6 +14,6 @@ public class GravityBody : MonoBehaviour
     }
 
     void FixedUpdate(){
-        planet.Attract(this.GetComponent<Transform>());
+        planet.Attract(this.GetComponent<Transform>(), this.GetComponent<Rigidbody>());
     }
 }

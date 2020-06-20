@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     public void Victory()
     {
         //Save score
-        Variables.scores[Variables.currentLevel-1] = GameObject.Find("Player").GetComponent<PlayerController>().score;
+        Variables.scores[Variables.currentLevel-1] = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().score;
         SceneManager.LoadScene("Victoria");
         
     }

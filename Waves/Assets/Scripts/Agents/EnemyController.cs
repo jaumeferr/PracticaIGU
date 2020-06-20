@@ -25,7 +25,7 @@ public class EnemyController : MonoBehaviour
 
         rb = this.GetComponent<Rigidbody>();
         tf = this.GetComponent<Transform>();
-        player = GameObject.Find("Player").GetComponent<Rigidbody>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
 
         //Level 2
         GameObject friendObj = GameObject.FindGameObjectWithTag("NPC");

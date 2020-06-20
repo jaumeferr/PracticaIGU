@@ -15,32 +15,41 @@ public class SkillBarController : MonoBehaviour
 
     public void SetAttackBar()
     {
-        player = GameObject.Find("Player").GetComponent<Rigidbody>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             AttackLabel.SetActive(true);
             isCooldown = true;
-            player.GetComponent<Renderer>().sharedMaterial.EnableKeyword("_EMISSION");
-            player.GetComponent<Renderer>().sharedMaterial.SetColor("_EmissionColor", AttackColor);
+            //Activar anim ataque en loop
+            player.GetComponent<Animator>().SetBool("Space", true);
+
             player.GetComponent<PlayerController>().attacking = true;
         }
 
-        if(isCooldown)
+        if (isCooldown)
         {
             imageCooldown.fillAmount += 1 / cooldown * Time.deltaTime;
 
-            if(imageCooldown.fillAmount > 0.5)
+            //50% TIEMPO EN ATAQUE - 50% EN COOLDOWN
+            if (imageCooldown.fillAmount > 0.5)
             {
+                //En cooldown
                 AttackLabel.SetActive(false);
                 player.GetComponent<PlayerController>().attacking = false;
-                player.GetComponent<Renderer>().sharedMaterial.EnableKeyword("_EMISSION");
-                player.GetComponent<Renderer>().sharedMaterial.SetColor("_EmissionColor", initialColor);
+
+                //Cortar habilidad de ataque
+                player.GetComponent<Animator>().SetBool("Space", false);
+
+            } else{
+                //En ataque
+                player.GetComponent<Animator>().SetBool("Space", true);
             }
-            if(imageCooldown.fillAmount == 1)
+
+            if (imageCooldown.fillAmount == 1)
             {
                 imageCooldown.fillAmount = 0;
                 isCooldown = false;

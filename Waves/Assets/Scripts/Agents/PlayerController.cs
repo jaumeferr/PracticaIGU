@@ -23,12 +23,15 @@ public class PlayerController : MonoBehaviour
     public int muertos;
     public GameObject pickMessage;
     public float maxActionDist = 4.5f;
+    [HideInInspector]
+    public Animator anim;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = this.GetComponent<Rigidbody>();
         tf = this.GetComponent<Transform>();
+        anim = this.GetComponent<Animator>();
         attacking = false;
         skillBar.SetAttackBar();
         healthBar.SetMaxHealth(vidas);
@@ -41,6 +44,23 @@ public class PlayerController : MonoBehaviour
         //Movimiento adelante y atrás
         float moveHorizontal = Input.GetAxisRaw("Horizontal");
         float moveVertical = Input.GetAxisRaw("Vertical");
+
+        //Animation
+        if(moveVertical > 0){
+            anim.SetBool("W", true);
+            anim.SetBool("S",false);
+        } 
+        
+        if(moveVertical < 0){
+            anim.SetBool("S",true);
+            anim.SetBool("W",false);
+        }
+
+        if(moveVertical == 0){
+            anim.SetBool("W", false);
+            anim.SetBool("S", false);
+        }
+        //Movement
         Vector3 moveDir = new Vector3(0, 0, moveVertical).normalized;
 
         Vector3 targetMoveAmount = moveDir * playerSpeed;
