@@ -87,7 +87,7 @@ public class ChallengeController : MonoBehaviour
         GameObject.Find("TerrainSeed").GetComponent<GenerateVegetation>().Generate();
 
         //Locate NPC
-        this.SpawnNPC();
+        //this.SpawnNPC();
 
         //Clear Scene
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -103,7 +103,7 @@ public class ChallengeController : MonoBehaviour
         GameObject.Find("Planet").GetComponent<EnemySpawner>().InitializeSpawnConfig(2, 2); // waves, enemiesPerWave, waiting time
 
         //Esperar 10s antes de spawnear enemigos
-        Invoke("DelayedSpawn", 10.0f);
+        Invoke("DelayedSpawn", 20.0f);
 
         Debug.Log("Oleadas: " + GameObject.Find("Planet").GetComponent<EnemySpawner>().waves + "\n" +
                    "Enemigos por oleada: " + GameObject.Find("Planet").GetComponent<EnemySpawner>().enemiesPerWave + "\n" +
