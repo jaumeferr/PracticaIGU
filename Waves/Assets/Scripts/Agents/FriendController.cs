@@ -21,8 +21,8 @@ public class FriendController : MonoBehaviour
         rb = this.GetComponent<Rigidbody>();
         tf = this.GetComponent<Transform>();
         slider = GameObject.Find("FriendLife").GetComponent<Slider>();
-        this.SetMaxHealth(5); ///Dificultad?
-        this.vidas = 5;
+        this.SetMaxHealth(Variables.maxNPCLifes); ///Dificultad?
+        this.vidas = Variables.maxNPCLifes;
         this.hasPaper = false;
         this.damageDelay = Variables.maxDamageDelay;
     }

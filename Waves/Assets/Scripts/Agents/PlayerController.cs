@@ -17,7 +17,9 @@ public class PlayerController : MonoBehaviour
     public bool attacking;
     public SkillBarController skillBar;
     public HealthBar healthBar;
+    [HideInInspector]
     public int vidas;
+    [HideInInspector]
     public float damageDelay;
     public int bajas = 0;
     public int muertos;
@@ -34,6 +36,7 @@ public class PlayerController : MonoBehaviour
         anim = this.GetComponent<Animator>();
         attacking = false;
         skillBar.SetAttackBar();
+        vidas = Variables.maxPlayerLifes;
         healthBar.SetMaxHealth(vidas);
         damageDelay = Variables.maxDamageDelay;
     }
@@ -45,18 +48,27 @@ public class PlayerController : MonoBehaviour
         float moveHorizontal = Input.GetAxisRaw("Horizontal");
         float moveVertical = Input.GetAxisRaw("Vertical");
 
-        //Animation
-        if(moveVertical > 0){
-            anim.SetBool("W", true);
-            anim.SetBool("S",false);
-        } 
-        
-        if(moveVertical < 0){
-            anim.SetBool("S",true);
-            anim.SetBool("W",false);
+        //Si no tiene vidas termina la partida
+        if (vidas < 1)
+        {
+            FindObjectOfType<GameManager>().GameOver();
         }
 
-        if(moveVertical == 0){
+        //Animation
+        if (moveVertical > 0)
+        {
+            anim.SetBool("W", true);
+            anim.SetBool("S", false);
+        }
+
+        if (moveVertical < 0)
+        {
+            anim.SetBool("S", true);
+            anim.SetBool("W", false);
+        }
+
+        if (moveVertical == 0)
+        {
             anim.SetBool("W", false);
             anim.SetBool("S", false);
         }
@@ -120,36 +132,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy")
         {
-            if (!attacking)
-            {
-                if (this.damageDelay == Variables.maxDamageDelay)
-                {
-                    healthBar.SetHealthBar(vidas);
-                    if (vidas < 1)
-                    {
-                        FindObjectOfType<GameManager>().GameOver();
-                    }
-                    this.damageDelay -= Time.deltaTime;
-                }
-
-                if (this.damageDelay <= 0)
-                {
-                    this.damageDelay = Variables.maxDamageDelay;
-                }
-
-                if ((this.damageDelay > 0) && (this.damageDelay < Variables.maxDamageDelay))
-                {
-                    this.damageDelay -= Time.deltaTime;
-                }
-
-                vidas = vidas - 1;
-                healthBar.SetHealthBar(vidas);
-                if (vidas < 1)
-                {
-                    FindObjectOfType<GameManager>().GameOver();
-                }
-            }
-            else
+            if (attacking)
             {
                 //LEVEL_01
                 if (SceneManager.GetActiveScene().name == "Level_01")
@@ -193,6 +176,32 @@ public class PlayerController : MonoBehaviour
         npc.GetComponent<FriendController>().hasPaper = true;
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Enemy")
+        {
+            if (!attacking)
+            {
+                if (this.damageDelay == Variables.maxDamageDelay)
+                {
+                    healthBar.SetHealthBar(vidas - 1);
+                    vidas--;
+                    this.damageDelay -= Time.deltaTime;
+                }
+
+                if (this.damageDelay <= 0)
+                {
+                    this.damageDelay = Variables.maxDamageDelay;
+                }
+
+                if ((this.damageDelay > 0) && (this.damageDelay < Variables.maxDamageDelay))
+                {
+                    this.damageDelay -= Time.deltaTime;
+                }
+            }
+
+        }
+    }
     void addPoints(int points)
     {
         this.score += points;
