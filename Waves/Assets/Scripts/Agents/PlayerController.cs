@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     public float maxActionDist = 4.5f;
     [HideInInspector]
     public Animator anim;
+    private bool isTriggered = false;
 
     // Start is called before the first frame update
     void Start()
@@ -128,20 +129,27 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void Kill()
+    {
+        if (muertos > 1)
+        {
+            muertos = muertos - 1;
+        }else{
+            FindObjectOfType<GameManager>().Victory();
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy" && !isTriggered)
         {
+            isTriggered = true;
             if (attacking)
             {
                 //LEVEL_01
                 if (SceneManager.GetActiveScene().name == "Level_01")
                 {
-                    muertos = muertos - 1;
-                    if (muertos == 0)
-                    {
-                        FindObjectOfType<GameManager>().Victory();
-                    }
+                    Kill();
                 }
 
                 //LEVEL_02
@@ -168,6 +176,14 @@ public class PlayerController : MonoBehaviour
 
                 Destroy(other.gameObject);
             }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(isTriggered)
+        {
+            isTriggered = false;
         }
     }
 
