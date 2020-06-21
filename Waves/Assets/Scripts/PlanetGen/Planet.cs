@@ -18,6 +18,7 @@ public class Planet : MonoBehaviour
     public TerrainFace[] terrainFaces;
     public Color planetColor = Color.black;
     EnemySpawner enemySpawner;
+    public Material faceMaterial;
 
     void Initialize()
     {
@@ -61,7 +62,7 @@ public class Planet : MonoBehaviour
     {
         Initialize();
         GenerateMesh();
-        GenerateColours();
+        SetGroundTexture();
     }
 
     void GenerateMesh()
@@ -72,15 +73,17 @@ public class Planet : MonoBehaviour
         }
     }
 
-    void GenerateColours()
+    void SetGroundTexture()
     {
         //rdPlanetColor = new Color((float)Random.Range(0, 255), (float)Random.Range(0, 255), (float)Random.Range(0, 255));
 
         GameObject[] faces = GameObject.FindGameObjectsWithTag("PlanetFace");
         foreach (GameObject face in faces)
         {
-            face.GetComponent<Renderer>().sharedMaterial.EnableKeyword("_EMISSION");
-            face.GetComponent<Renderer>().sharedMaterial.SetColor("_EmissionColor", planetColor);
+            //face.GetComponent<Renderer>().sharedMaterial.EnableKeyword("_EMISSION");
+            //face.GetComponent<Renderer>().sharedMaterial.SetColor("_EmissionColor", planetColor);
+            //face.GetComponent<Renderer>().sharedMaterial.SetTexture("_MainTex", faceTexture);
+            face.GetComponent<Renderer>().sharedMaterial = faceMaterial;
         }
     }
 }
