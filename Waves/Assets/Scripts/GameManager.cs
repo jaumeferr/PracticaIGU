@@ -28,8 +28,14 @@ public class GameManager : MonoBehaviour
 
     public void Victory()
     {
-        //Save score
-        Variables.scores[Variables.currentLevel-1] = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().score;
+        //Calcular score
+        GameObject.Find("GameManager").GetComponent<ChallengeController>().CalculateScore();
+
+        //Unlock next level if its locked
+        if(Variables.unlockedLevels[Variables.currentLevel] == false){
+            //Unlock level
+        }
+        
         SceneManager.LoadScene("Victoria");
         
     }

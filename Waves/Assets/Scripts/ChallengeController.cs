@@ -8,8 +8,6 @@ public class ChallengeController : MonoBehaviour
     public UnityEngine.UI.Text timerText;
     private float secondsCount;
     private int minuteCount;
-    private int hourCount;
-
     public Transform NPC;
 
     public void Start()
@@ -31,8 +29,6 @@ public class ChallengeController : MonoBehaviour
 
         secondsCount = 0;
         minuteCount = 0;
-        hourCount = 0;
-
     }
 
     void Update()
@@ -55,6 +51,8 @@ public class ChallengeController : MonoBehaviour
 
     public void Initialize_Level_01()
     {
+        Variables.currentLevel = 1;
+        Variables.nextLevel = Variables.currentLevel + 1;
         //Generate Planet  
         GameObject.Find("Planet").GetComponent<Planet>().GeneratePlanet();
 
@@ -80,6 +78,9 @@ public class ChallengeController : MonoBehaviour
 
     public void Initialize_Level_02()
     {
+        Variables.currentLevel = 2;
+        Variables.nextLevel = Variables.currentLevel + 1;
+
         //Generate Planet  
         GameObject.Find("Planet").GetComponent<Planet>().GeneratePlanet();
 
@@ -100,7 +101,7 @@ public class ChallengeController : MonoBehaviour
         }
 
         //Initialize Spawner
-        GameObject.Find("Planet").GetComponent<EnemySpawner>().InitializeSpawnConfig(2, 2); // waves, enemiesPerWave, waiting time
+        GameObject.Find("Planet").GetComponent<EnemySpawner>().InitializeSpawnConfig(5, 5); // waves, enemiesPerWave, waiting time
 
         //Esperar 10s antes de spawnear enemigos
         Invoke("DelayedSpawn", 20.0f);
@@ -116,8 +117,41 @@ public class ChallengeController : MonoBehaviour
         GameObject.Find("Planet").GetComponent<EnemySpawner>().SpawnEnemies();
     }
 
-    public void SpawnNPC(){
+    public void SpawnNPC()
+    {
         Vector3 spawnPos = GameObject.Find("TerrainSeed").GetComponent<GenerateVegetation>().randomVertex();
-        Instantiate(NPC, spawnPos + 1 * (spawnPos - Vector3.zero).normalized,Quaternion.FromToRotation(Vector3.up, (spawnPos-Vector3.zero)));
+        Instantiate(NPC, spawnPos + 1 * (spawnPos - Vector3.zero).normalized, Quaternion.FromToRotation(Vector3.up, (spawnPos - Vector3.zero)));
+
+
+    }
+
+    public void CalculateScore()
+    {
+        float score = 0;
+
+        //Scores level 2
+        if (SceneManager.GetActiveScene().name == "Level_02")
+        {
+            float timer = this.secondsCount + 60 * this.minuteCount;
+
+            if (timer < 40)
+            {
+                score = 100;
+            }
+
+            if (timer >= 40 && timer <= 100)
+            {
+                score = ((-139 * (timer - 60)) / 40) + 140;
+            }
+
+            if (timer > 100)
+            {
+                score = 1;
+            }
+
+            if(score > Variables.scores[Variables.currentLevel -1]){
+                Variables.scores[Variables.currentLevel - 1] = (int)Math.Round(score);
+            }
+        }
     }
 }
