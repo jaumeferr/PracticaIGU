@@ -129,6 +129,28 @@ public class ChallengeController : MonoBehaviour
     {
         float score = 0;
 
+        //Scores level 1
+        if (SceneManager.GetActiveScene().name == "Level_01")
+        {
+            float timer = this.secondsCount + 60 * this.minuteCount;
+            print(timer);
+            if (timer < 30)
+            {
+                score = 100;
+            }else if(timer >= 30 && timer <= 60)
+            {
+                score = (100 - ((timer*30)/ 100));
+            }
+            else if (timer > 60)
+            {
+                score = 1;
+            }
+            if (score > Variables.scores[Variables.currentLevel - 1])
+            {
+                Variables.scores[Variables.currentLevel - 1] = (int)Math.Round(score);
+            }
+        }
+
         //Scores level 2
         if (SceneManager.GetActiveScene().name == "Level_02")
         {
