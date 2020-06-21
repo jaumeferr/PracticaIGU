@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Al salir de la partida nos llevará al menu principal
     public void QuitGame()
     {
         Application.Quit();
