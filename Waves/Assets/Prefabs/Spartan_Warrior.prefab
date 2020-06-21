@@ -1204,7 +1204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10fb67088fae2354daee3a46fb977b1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 8
+  playerSpeed: 12
   sensibility: 1
   score: 0
   turn: 0
