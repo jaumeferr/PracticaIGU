@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
         vidas = Variables.maxPlayerLifes;
         healthBar.SetMaxHealth(vidas);
         damageDelay = Variables.maxDamageDelay;
+        Variables.playerHasPaper = false;
     }
 
     // Update is called once per frame

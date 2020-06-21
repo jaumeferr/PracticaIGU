@@ -7,6 +7,7 @@ public class FriendController : MonoBehaviour
 {
     [HideInInspector]
     public Slider slider;
+    GameObject friendPanel;
     public int vidas;
     [HideInInspector]
     public Rigidbody rb;
@@ -20,11 +21,14 @@ public class FriendController : MonoBehaviour
     {
         rb = this.GetComponent<Rigidbody>();
         tf = this.GetComponent<Transform>();
+        friendPanel = GameObject.Find("FriendPanel");
         slider = GameObject.Find("FriendLife").GetComponent<Slider>();
         this.SetMaxHealth(Variables.maxNPCLifes); ///Dificultad?
         this.vidas = Variables.maxNPCLifes;
         this.hasPaper = false;
         this.damageDelay = Variables.maxDamageDelay;
+
+        friendPanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -39,6 +43,7 @@ public class FriendController : MonoBehaviour
         {
             if (this.damageDelay == Variables.maxDamageDelay)
             {
+                friendPanel.SetActive(true);
                 SetHealthBar(vidas - 1);
                 if (vidas < 1)
                 {

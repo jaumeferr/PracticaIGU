@@ -9,6 +9,7 @@ public class ChallengeController : MonoBehaviour
     private float secondsCount;
     private int minuteCount;
     public Transform NPC;
+    public GameObject audio;
 
     public void Start()
     {
@@ -25,6 +26,13 @@ public class ChallengeController : MonoBehaviour
                 break;
 
 
+        }
+
+        //Configure sound
+        if(Variables.soundOn == false){
+            if(audio != null){
+                audio.SetActive(false);
+            }
         }
 
         secondsCount = 0;
@@ -161,12 +169,13 @@ public class ChallengeController : MonoBehaviour
                 score = 100;
             }
 
-            if (timer >= 40 && timer <= 100)
+            if (timer >= 40 && timer <= 140)
             {
-                score = ((-139 * (timer - 60)) / 40) + 140;
+                //F(x)= -1'4x + 199 --> X1=70,Y1=100 / X2=140,Y2=1
+                score = -1.4f * timer + 199; 
             }
 
-            if (timer > 100)
+            if (timer > 140)
             {
                 score = 1;
             }
@@ -175,5 +184,7 @@ public class ChallengeController : MonoBehaviour
                 Variables.scores[Variables.currentLevel - 1] = (int)Math.Round(score);
             }
         }
+
+        Variables.lastScore = (int)Math.Round(score);
     }
 }

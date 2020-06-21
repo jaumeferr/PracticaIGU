@@ -32,9 +32,7 @@ public class GameManager : MonoBehaviour
         GameObject.Find("GameManager").GetComponent<ChallengeController>().CalculateScore();
 
         //Unlock next level if its locked
-        if(Variables.unlockedLevels[Variables.currentLevel] == false){
-            //Unlock level
-        }
+        Variables.unlockedLevels[Variables.currentLevel] = true;
         
         SceneManager.LoadScene("Victoria");
         
