@@ -9,6 +9,7 @@ public class ChallengeController : MonoBehaviour
     private float secondsCount;
     private int minuteCount;
     public Transform NPC;
+    public GameObject audio;
 
     public void Start()
     {
@@ -25,6 +26,13 @@ public class ChallengeController : MonoBehaviour
                 break;
 
 
+        }
+
+        //Configure sound
+        if(Variables.soundOn == false){
+            if(audio != null){
+                audio.SetActive(false);
+            }
         }
 
         secondsCount = 0;
