@@ -48,7 +48,10 @@ public class GenerateVegetation : MonoBehaviour
         //Generar 
         this.GenerateTrees();
         this.GenerateRocks();
-        //this.GenerateGrass();
+        if (Variables.generateGrass)
+        {
+            this.GenerateGrass();
+        }
     }
 
     private void CleanTerrain()
@@ -155,7 +158,7 @@ public class GenerateVegetation : MonoBehaviour
 
     private void GenerateGrass()
     {
-        this.grass = new Grass(0.2f);
+        this.grass = new Grass(0.193f);
 
         foreach (TerrainFace tf in GameObject.Find("Planet").GetComponent<Planet>().terrainFaces)
         {
