@@ -141,7 +141,7 @@ public class ChallengeController : MonoBehaviour
 
             if (timer >= 40 && timer <= 100)
             {
-                score = ((-139 * (timer - 60)) / 40) + 140;
+                score = ((-159 * (timer - 80)) / 20) + 160;
             }
 
             if (timer > 100)
@@ -153,5 +153,7 @@ public class ChallengeController : MonoBehaviour
                 Variables.scores[Variables.currentLevel - 1] = (int)Math.Round(score);
             }
         }
+
+        Variables.lastScore = (int)Math.Round(score);
     }
 }
