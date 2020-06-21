@@ -35,6 +35,9 @@ public class ChallengeController : MonoBehaviour
             }
         }
 
+        //Open message - Pause menu
+        GameObject.Find("Canvas").GetComponent<PauseMenu>().Pause();
+
         secondsCount = 0;
         minuteCount = 0;
     }

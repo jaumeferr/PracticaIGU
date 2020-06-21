@@ -8,6 +8,9 @@ public class VictoryScoreController : MonoBehaviour
     public Text text;
     void Start()
     {
+        if(Variables.currentLevel == 2){
+            GameObject.Find("NextLevelButton").SetActive(false);
+        }
         text.text = Variables.lastScore.ToString();
     }
 }
