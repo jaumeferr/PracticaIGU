@@ -1,5 +1,4 @@
 # PracticaIGU
 Práctica IGU - 4º Ing. Informática
 
-Meh
-BBBBBBBBBBRUUUUUUUUUUUUH
+Just a funny game.
